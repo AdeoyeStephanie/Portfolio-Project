@@ -6,6 +6,7 @@
     height: 100vh;
     margin: 0;
     padding: 0;
+    border: none;
 
 }
 .menu-bar{
@@ -46,6 +47,27 @@
     background-color: black;
     transition: 1.0s;
 }
+.home-image{
+   
+    position: absolute;
+    top: 20%;
+    left: 7%;
+    width: 450px;
+    height: auto;
+
+}
+.home-image img {
+    background-image: url(Images/IMG-20240619-WA0055\ copy.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%; /* Fills the container */
+    height: auto; /* Maintains aspect ratio */
+    object-fit: cover; /* Crops the image */
+    border-top-left-radius: 1500px; /* Adjust for desired curve */
+    border-top-right-radius: 1500px; /* Adjust for desired curve */
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 8px rgb(246, 227, 227);
+}
 .name-title-container{
     display: flex;
     width: 500px;
@@ -76,12 +98,11 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 200;
     transition: 0.2s;
-    
-}.sub-title-container{
+}  
+/*}.sub-title-container{
     display: flex;
-    top: 70%; /* Move to 70% from the top */
-    left: 42%; /* Move to 50% from the left */
-    /* background-color: rgb(112, 109, 109); */
+    top: 70%; 
+    left: 42%; 
     width: 800px;
     height: 100px;
     position: absolute;
@@ -90,8 +111,8 @@
     transition: 0.1s;
     animation-delay: 1.8s;
     animation-direction: forwards;
-    animation-timing-function: ease-in-out;  /* Make the animation smoothly end and not bounce */
-}
+    animation-timing-function: ease-in-out;  /* Make the animation smoothly end and not bounce} */ 
+
 @keyframes slideInRight {
     0% {
       transform: translateX(100%); /* Start off-screen to the right */
@@ -111,33 +132,4 @@
     font-size: 1.5em;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-.resume-container{
-    display: flex;
-    left: 18%;
-    top: 65%;
-    position: absolute;
-   /*background-color: aquamarine;*/
-    width: 280px;
-    height: 120px;
-    align-items: center;
-    justify-content: center;
-}
-.resume-button{
-    padding: 10px 20px;
-    background-color: rgb(169, 169, 169);
-    color: rgb(0, 0, 0);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 200px;
-    height: 60px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 500;
-    font-size: 1.3em;
-}
-.resume-button:hover{
-    color: black;
-    background-color: rgb(232, 227, 227);
-    transition: 1s;
-}
+

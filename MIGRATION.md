@@ -108,9 +108,9 @@ main ─────────────────────────
 **Rules of thumb:**
 - One logical change per branch. Commit often with clear messages (you already use `feat:` / `fix:` — keep that).
 - Open a PR for each slice even solo — the preview deploy + diff review is the payoff. Squash-merge to keep history clean.
-- **Clean up first:** there's a stale worktree at `.claude/worktrees/quizzical-cray`. Remove it before starting so it doesn't confuse you:
+- **Clean up first:** there's an orphaned folder at `.claude/worktrees/quizzical-cray` — a leftover from a past isolated Claude Code task (merged in commit `bee1db2`). It's *not* a registered worktree and *not* tracked by git (`.claude/` is gitignored), so just delete the folder:
   ```bash
-  git worktree remove .claude/worktrees/quizzical-cray
+  rm -rf .claude/worktrees/quizzical-cray
   ```
 - Don't commit `node_modules/` (your `.gitignore` should cover it — verify when the project's scaffolded).
 
@@ -123,7 +123,7 @@ main ─────────────────────────
 - [ ] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
 - [ ] `npm create vite@latest portfolio -- --template react-ts`
 - [ ] Add Tailwind, React Router, `motion`, `lucide-react`
-- [ ] Import DM Sans + Josefin Slab; set Tailwind theme tokens
+- [ ] Import Montserrat + Reenie Beanie + Roboto Mono + Poppins; set Tailwind theme tokens
 - [ ] Connect the repo to **Vercel**, confirm a preview deploy builds
 - [ ] Commit: "chore: scaffold Vite + React + TS + Tailwind"
 

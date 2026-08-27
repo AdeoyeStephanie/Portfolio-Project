@@ -119,9 +119,9 @@ main ─────────────────────────
 ## 4. Migration phases (the checklist — update as you go)
 
 ### Phase 0 — Setup ⬜
-- [ ] Remove stale worktree (`quizzical-cray`)
-- [ ] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
-- [ ] `npm create vite@latest portfolio -- --template react-ts`
+- [x] Remove stale worktree (`quizzical-cray`)
+- [x] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
+- [x] `npm create vite@latest portfolio -- --template react-ts`
 - [ ] Add Tailwind, React Router, `motion`, `lucide-react`
 - [ ] Import Montserrat + Reenie Beanie + Roboto Mono + Poppins; set Tailwind theme tokens
 - [ ] Connect the repo to **Vercel**, confirm a preview deploy builds
@@ -154,15 +154,7 @@ main ─────────────────────────
 
 ---
 
-## 5. Figma integration
 
-Your Figma frames are the source of truth for Phase 3. To let Claude Code pull them directly:
-
-- **Action needed from you:** authorize the **Figma connector** in claude.ai connector settings (the Figma MCP is installed but not yet authenticated in this environment). Once connected, paste a frame URL and I can read its layout, colors, and variables straight into Tailwind tokens and components.
-- Until then, export frames as PNGs and drop them in a `design/` folder for reference.
-- **Cosmos** (cosmos.so) is your inspo board — keep a collection for this site; reference it when we make motion/layout calls.
-
----
 
 ## 6. Your resumable workflow ("pick up anytime")
 

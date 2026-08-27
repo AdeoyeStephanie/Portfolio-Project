@@ -122,10 +122,10 @@ main ─────────────────────────
 - [x] Remove stale worktree (`quizzical-cray`)
 - [x] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
 - [x] `npm create vite@latest portfolio -- --template react-ts`
-- [ ] Add Tailwind, React Router, `motion`, `lucide-react`
-- [ ] Import Montserrat + Reenie Beanie + Roboto Mono + Poppins; set Tailwind theme tokens
+- [x] Add Tailwind, React Router, `motion`, `lucide-react`
+- [x] Import Montserrat + Reenie Beanie + Roboto Mono + Poppins; set Tailwind theme tokens
 - [ ] Connect the repo to **Vercel**, confirm a preview deploy builds
-- [ ] Commit: "chore: scaffold Vite + React + TS + Tailwind"
+- [ ] Commit the Tailwind + fonts work (deps, vite.config, index.css) — still uncommitted
 
 ### Phase 1 — Shell & routing ⬜
 - [ ] `App.tsx` layout with `<Nav/>` + `<Outlet/>`
@@ -185,7 +185,16 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 
 ## 7. Where I left off  ✍️ *(update every session)*
 
-- **Current branch:** `main` (migration not started yet)
-- **Done:** Planning complete. Stack decided (Vite + React + TS + Tailwind, deploy Vercel).
-- **Next action:** Phase 0 → remove stale worktree, then scaffold the Vite project.
-- **Open questions / notes:** Authorize the Figma connector so frames can be pulled directly. Decide subfolder vs sibling repo (recommended: `portfolio/` subfolder on `feat/react-migration`).
+- **Last worked:** 2026-08-27
+- **Current branch:** `feat/react-migration` (pushed to origin)
+- **Done:** Phase 0 almost complete. Scaffold committed & pushed (`fe5d8f1`). Tailwind + React Router + `motion` + `lucide-react` installed; Tailwind v4 wired via `@tailwindcss/vite` plugin (`vite.config.ts`) + `@import "tailwindcss"` in `src/index.css`. Fonts (Montserrat / Poppins / Roboto Mono / Reenie Beanie) + theme tokens (`--color-ink/paper/muted`, `--font-*`) set in `src/index.css` via `@theme`. Verified in browser: dark bg + Tailwind utilities work.
+- **⚠️ Uncommitted work sitting in the tree:** `package.json`, `package-lock.json`, `vite.config.ts`, `src/index.css`, `src/App.tsx` (whitespace only), plus this `MIGRATION.md`. **Nothing is lost — but it's not committed.**
+- **Next action (do first tomorrow):** Commit the Tailwind + fonts work:
+  ```bash
+  # from the repo root (Portfolio-Project/)
+  git add portfolio/ && git commit -m "feat: add Tailwind, router deps, and font/theme tokens"
+  git commit -am "docs: update phase 0 progress"   # commits MIGRATION.md
+  git push
+  ```
+  Then the **last Phase 0 item: connect the repo to Vercel** (import the GitHub repo at vercel.com, set root directory to `portfolio/`, confirm a preview deploy builds). That closes Phase 0 → start Phase 1 (shell & routing).
+- **Open questions / notes:** Authorize the **Figma connector** before Phase 3 (design pass) so frames can be pulled directly. Reminder: after editing `vite.config.ts` or installing packages, **restart the dev server** — `.tsx`/`.css` edits hot-reload, config/deps don't.

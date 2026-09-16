@@ -11,13 +11,12 @@ const links = [
 export default function Nav() {
   return (
     <>
-      {/* Distress filter — lives once, hidden. Turbulence noise displaces the
-          text edges, giving the nav that rough/eroded texture from Figma.
+      {/* Figma Texture feature on navbar.
           Tune: scale = how rough, baseFrequency = speck size. */}
       <svg width="0" height="0" aria-hidden="true" className="absolute">
         <filter id="rough" x="-15%" y="-15%" width="130%" height="130%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="n" />
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G" />
+          <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2" seed="7" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
 

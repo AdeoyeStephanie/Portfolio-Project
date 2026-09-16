@@ -7,20 +7,19 @@
      --font-script → font-script
      --color-ink   → bg-ink / text-ink, etc. */
 @theme {
-  --font-sans: "DM Sans", system-ui, sans-serif;      /* headings + body */
-  --font-script: "Reenie Beanie", cursive;            /* handwritten accents */
-  --font-mono: ui-monospace, "SF Mono", monospace;    /* system mono fallback */
+  --font-sans: "DM Sans", system-ui, sans-serif;      /* headline, nav, body — all weights */
+  --font-script: "Reenie Beanie", cursive;            /* handwritten accents (tagline) */
+  --font-mono: ui-monospace, "SF Mono", monospace;    /* optional technical accents */
 
-  --color-ink: #0a0a0a;    /* near-black background (from your original site) */
-  --color-paper: #ffffff;  /* white text */
-  --color-muted: #444141;  /* the rgb(68,65,65) grey accent from your original */
+  --color-paper: #ffffff;   /* page background (white) */
+  --color-ink:   #000000;   /* primary text (black) */
+  --color-coral: #d24836;   /* accent — headshot bg + the glow behind your name */
 }
 
-/* Base defaults so every page starts dark with DM Sans */
 body {
   margin: 0;
   min-height: 100svh;
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
 }

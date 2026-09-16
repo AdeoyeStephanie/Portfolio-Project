@@ -37,7 +37,7 @@ Files/           resume PDF
 **Observations that shape the rebuild:**
 - The nav bar is duplicated (hand-copied) across all 4 pages → becomes **one `<Nav>` component**.
 - Content is hardcoded in HTML → move to **typed data files** (`projects.ts`, `about.ts`) so you edit data, not markup.
-- Fonts already chosen: **Montserrat** + **reenie beanie** + **roboto mono** + **poppins**
+- Fonts chosen: **DM Sans** (headings + body) + **Reenie Beanie** (handwritten accent). System monospace fallback for any technical accents.
 - Palette is dark (black bg, white text, `rgb(68,65,65)` grey accents). Keep as the base; Figma frames will refine it.
 - `portfolio.js` is empty and `<script href=...>` on index is malformed (`href` should be `src`) — no JS behavior to port. Clean slate.
 - Absolute pixel values everywhere (`gap: 290px`, `left: 70%`) → rebuild responsively with flex/grid + Tailwind.
@@ -123,8 +123,8 @@ main ─────────────────────────
 - [x] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
 - [x] `npm create vite@latest portfolio -- --template react-ts`
 - [x] Add Tailwind, React Router, `motion`, `lucide-react`
-- [ ] Import Montserrat + Reenie Beanie + Roboto Mono + Poppins; set Tailwind theme tokens
-- [ ] Connect the repo to **Vercel**, confirm a preview deploy builds ← *only Phase 0 item left*
+- [x] Import DM Sans + Reenie Beanie; set Tailwind theme tokens (done on disk — commit pending)
+- [ ] Connect the repo to **Vercel**, confirm a preview deploy builds ← *last Phase 0 item*
 
 ### Phase 1 — Shell & routing ⬜
 - [ ] `App.tsx` layout with `<Nav/>` + `<Outlet/>`
@@ -184,13 +184,12 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 
 ## 7. Where I left off  ✍️ *(update every session)*
 
-- **Last worked:** 2026-08-27
+- **Last worked:** 2026-09-16
 - **Current branch:** `feat/react-migration` (pushed to origin)
-- **Done:** Phase 0 nearly complete — **all code work committed & pushed.** Scaffold (`fe5d8f1`). Tailwind + React Router + `motion` + `lucide-react` installed; Tailwind v4 wired via `@tailwindcss/vite` plugin (`vite.config.ts`) + `@import "tailwindcss"` in `src/index.css`. Fonts (Montserrat / Poppins / Roboto Mono / Reenie Beanie) + theme tokens (`--color-ink/paper/muted`, `--font-*`) set in `src/index.css` via `@theme` — committed in `e60caf5`. Verified in browser: dark bg + Tailwind utilities work.
-- **Working tree:** clean 
-- **Next action (do first tomorrow) — the LAST Phase 0 item: connect Vercel.**
-  1. Go to vercel.com → log in with GitHub → "Add New… → Project" → import the `Portfolio-Project` repo.
-  2. **Set the Root Directory to `portfolio/`** (important — the app lives in the subfolder, not the repo root). Framework preset should auto-detect **Vite**.
-  3. Pick the `feat/react-migration` branch to deploy; confirm the preview build succeeds and open the URL.
-  4. Tick the Vercel box above → **Phase 0 DONE** → start **Phase 1 (shell & routing)**.
-- **Open questions / notes:** Authorize the **Figma connector** before Phase 3 (design pass) so frames can be pulled directly. Reminder: after editing `vite.config.ts` or installing packages, **restart the dev server** — `.tsx`/`.css` edits hot-reload, config/deps don't.
+- **Done:** Phase 0 essentially complete. Scaffold committed (`fe5d8f1`). Tailwind + React Router + `motion` + `lucide-react` installed; Tailwind v4 wired via `@tailwindcss/vite` plugin. Fonts **DM Sans** (headings + body) + **Reenie Beanie** (accent) + system-mono fallback, theme tokens (`--color-ink/paper/muted`, `--font-*`) in `src/index.css` via `@theme` — committed & pushed. Verified in browser: dark bg + DM Sans render.
+- **Vercel:** project `portfolio-project` connected to the GitHub repo. Configured: **Root Directory = `portfolio`**, **Production Branch = `feat/react-migration`**, Framework = Vite. First React build triggers on the next push to that branch.
+  - ⚠️ Gotcha learned: Vercel's *import* wizard browses `main` (which has no `portfolio/`), so the folder isn't selectable there — set Root Directory as a **text field in Settings → Build and Deployment** afterward, and Production Branch under **Settings → Environments → Production**.
+  - At **launch (Phase 4):** merge to `main`, then switch Vercel Production Branch back to `main`, and repoint the Porkbun `.com` DNS from Netlify → Vercel. Old site stays live on Netlify until then.
+- **Vercel URL:** `portfolio-project-sage-psi.vercel.app` (production alias) — will show the React app after the first branch build.
+- **Next action:** confirm the Vercel build from `feat/react-migration` is green and shows the **dark DM Sans Vite starter** (not the old teal-headshot HTML). Then **Phase 0 is DONE** → start **Phase 1 (shell & routing):** `<Nav/>` + `<Button/>`, four page stubs, `App.tsx` layout with `<Outlet/>`, router in `main.tsx` for `/ /about /projects /contact`.
+- **Open questions / notes:** Authorize the **Figma connector** before Phase 3 (design pass). Reminder: after editing `vite.config.ts` or installing packages, **restart the dev server** — `.tsx`/`.css` edits hot-reload, config/deps don't.

@@ -14,7 +14,7 @@
 | Styling | **Tailwind CSS** | You already know it; fast, consistent, easy to match Figma tokens. |
 | Routing | **React Router** | Client-side routing for Home / About / Projects / Contact. |
 | Animation | **Motion** (`motion`, formerly Framer Motion) | The "design engineer" signal — smooth, tasteful transitions. |
-| Deploy | **Vercel** (new site) | Best React DX, per-branch preview deploys. Old Netlify/GH-Pages stays live until launch. |
+| Deploy | **Vercel**  | Best React DX, per-branch preview deploys. Old Netlify/GH-Pages stays live until launch. |
 | Icons | **lucide-react** or `react-icons` | Replaces the Font Awesome CDN on the contact page. |
 
 ---
@@ -38,7 +38,7 @@ Files/           resume PDF
 - The nav bar is duplicated (hand-copied) across all 4 pages → becomes **one `<Nav>` component**.
 - Content is hardcoded in HTML → move to **typed data files** (`projects.ts`, `about.ts`) so you edit data, not markup.
 - Fonts chosen: **DM Sans** (headings + body) + **Reenie Beanie** (handwritten accent). System monospace fallback for any technical accents.
-- Palette is dark (black bg, white text, `rgb(68,65,65)` grey accents). Keep as the base; Figma frames will refine it.
+- Palette (from Figma Landing Page): **light** — white bg `#ffffff`, black text `#000000`, **coral `#d24836`** accent (headshot backdrop + glow behind the name). *(The old dark theme is gone — the new design is light.)*
 - `portfolio.js` is empty and `<script href=...>` on index is malformed (`href` should be `src`) — no JS behavior to port. Clean slate.
 - Absolute pixel values everywhere (`gap: 290px`, `left: 70%`) → rebuild responsively with flex/grid + Tailwind.
 
@@ -88,7 +88,6 @@ portfolio/                      # new Vite project (see Phase 1)
 
 ## 3. Git branching & workflow
 
-You're a solo dev, so keep it lightweight but professional (this *is* portfolio-worthy process).
 
 **Branch model:**
 - `main` — always deployable. The **old site keeps living here** until the React version is ready to launch.
@@ -118,42 +117,72 @@ main ─────────────────────────
 
 ## 4. Migration phases (the checklist — update as you go)
 
-### Phase 0 — Setup ⬜
+> **How we work (read this first):** design-driven + hands-on. Figma is connected **live** (see §5) — we pull real
+> tokens/layout from the frames rather than guessing, and re-sync when the design changes. Stephanie writes the
+> code; Claude guides step by step and explains the *why*. Tokens are pulled **early** (Phase 1) so every component
+> is built against the real design, not placeholders.
+
+### Phase 0 — Setup ✅ DONE
 - [x] Remove stale worktree (`quizzical-cray`)
-- [x] Decide repo layout: **new `portfolio/` subfolder** in this repo, OR a fresh sibling repo. (Recommended: subfolder on `feat/react-migration` so the old site + new build coexist; move to root at launch.)
+- [x] Repo layout: **`portfolio/` subfolder** on `feat/react-migration` (old HTML site + new React build coexist; move to root at launch)
 - [x] `npm create vite@latest portfolio -- --template react-ts`
 - [x] Add Tailwind, React Router, `motion`, `lucide-react`
-- [x] Import DM Sans + Reenie Beanie; set Tailwind theme tokens (done on disk — commit pending)
-- [ ] Connect the repo to **Vercel**, confirm a preview deploy builds ← *last Phase 0 item*
+- [x] Import DM Sans + Reenie Beanie; set Tailwind `@theme` tokens in `src/index.css`
+- [x] Vercel connected: Root Directory = `portfolio`, Production Branch = `feat/react-migration`, auto-builds on push. Live at `portfolio-project-sage-psi.vercel.app`
 
-### Phase 1 — Shell & routing ⬜
-- [ ] `App.tsx` layout with `<Nav/>` + `<Outlet/>`
-- [ ] Routes for `/`, `/about`, `/projects`, `/contact`
-- [ ] `<Nav/>` component (replaces the 4 duplicated menu bars)
-- [ ] `<Button/>` primitive
+### Phase 1 — Design tokens + shell & routing ⬜
+- [x] **Pull real tokens from Figma → `@theme` in `src/index.css`** (2026-09-16). Light palette: `--color-paper #ffffff` (bg), `--color-ink #000000` (text), `--color-coral #d24836` (accent — headshot backdrop + the glow behind the name). `--font-sans` DM Sans (all weights: ExtraLight nav, Regular body, SemiBold Italic headline), `--font-script` Reenie Beanie. → utilities `bg-paper` / `text-ink` / `text-coral` / `font-sans` / `font-script`.
+- [x] `<Nav/>` component: `experience · my work · play · beyond code` (DM Sans ExtraLight) with active-underline + hover; **distress texture** via SVG `#rough` filter (see "Where I left off"). Sizing/spacing to be fine-tuned against Figma in Phase 2.
+- [ ] `<Button/>` primitive (variants matched to Figma) ← *next*
+- [x] Router + `App.tsx` shell (`<Nav/>` + `<Outlet/>`). **Multi-page routes:** `/` = Home (Landing: hero + bio), `/experience`, `/my-work`, `/beyond-code`, `/play`. Nav = React Router `NavLink`s. Verified in browser.
+- [x] Section/page components as route targets (`src/pages/`: Home, Experience, MyWork, Play, BeyondCode — stubs; content in Phase 2)
 
-### Phase 2 — Pages (one branch each) ⬜
-- [ ] Home — name title, hero image, resume button
-- [ ] Projects — `projects.ts` → `<ProjectCard/>` grid
-- [ ] Contact — `contact.ts` → `<ContactCard/>` (swap Font Awesome for lucide/react-icons)
-- [ ] About — `about.ts` blocks
+### Phase 2 — Sections (build each against its Figma frame; one branch each) ⬜
+*Old Home/About/Projects/Contact structure is abandoned — the Figma IA below is the source of truth.*
+- [ ] **Hero + bio** (top of Landing Page): name headline (DM Sans SemiBold Italic, coral glow), pronunciation, Reenie Beanie tagline, coral headshot; "who is Stephanie" bio paragraphs
+- [ ] **my work** — project cards (Figma "my work" frame); repeated data → `src/data/projects.ts`
+- [ ] **experience** — Figma "experience" frame
+- [ ] **beyond code** — category cards (Figma "Beyond code" frame)
+- [ ] **play** — Figma "play" frame
+- [ ] Icons via **lucide-react** (not the old Font Awesome CDN); copy resume PDF + headshot into `portfolio/public/`
 
-### Phase 3 — Design pass (Figma-driven) ⬜
-- [ ] Pull tokens from Figma frames (colors, type scale, spacing) → `tailwind.config.ts`
-- [ ] Rebuild each page responsively (kill the fixed pixel offsets)
-- [ ] Add motion: page transitions, hover states, subtle entrance animations
-- [ ] Mobile pass (your current site isn't responsive)
+### Phase 3 — Motion, responsive & polish ⬜
+- [ ] Responsive / mobile pass (the old site isn't responsive — kill the fixed pixel offsets like `gap: 290px`, `left: 70%`)
+- [ ] Motion with `motion`: page transitions, hover states, subtle entrance animations (tasteful Reenie Beanie accents where they fit)
+- [ ] Accessibility + Lighthouse check
+- [ ] Final design re-sync against the latest Figma frames
 
 ### Phase 4 — Launch ⬜
-- [ ] Lighthouse / accessibility check
-- [ ] Point custom domain (or GH-Pages URL) at the new build
-- [ ] Merge `feat/react-migration` → `main`; move `portfolio/` to root
+- [ ] Merge `feat/react-migration` → `main`; move `portfolio/` contents to repo root
+- [ ] Switch Vercel **Production Branch back to `main`**
+- [ ] Repoint the Porkbun `.com` DNS: **Netlify → Vercel** (add the domain in Vercel, update Porkbun records). Keep the Netlify site live until DNS propagates, then retire it.
 - [ ] Update `README.md` tech stack section
-- [ ] Archive old HTML files (git history keeps them; can delete from working tree)
+- [ ] Archive old HTML files (git history keeps them; can delete from the working tree)
 
 ---
 
+## 5. Design workflow — live Figma (changes frequently)
 
+Figma is connected **live** to this Claude Code session (confirmed via `whoami` → Stephanie's Figma org, 2026-09-16). No PNG exports or `design/` folder needed — Claude reads frames on demand.
+
+**Sync rhythm** (because the file changes often):
+- **Tokens are the stable contract.** Colors, type scale, and spacing change rarely → mirror them into `@theme` in `src/index.css` once (Phase 1). Every component reads those tokens, so a palette change is a one-place edit, not a 30-component rewrite.
+- **Layout is the fluid layer.** Sync it at checkpoints, not continuously — when building a page (Phase 2) or on an explicit "re-sync page X."
+- **Log design *decisions*** (the *why* Figma doesn't capture) right here in this doc. Only spin up a separate `DESIGN.md` if notes outgrow it.
+
+### Design reference — read from Figma 2026-09-16
+
+**File:** `Portfolio-Website` (fileKey `0OlfnAukOSNNvSBkiXzod7`). **Canonical frame: "Landing Page"** (node `1:2`). **Ignore any frame named "(old)"** unless told otherwise. File uses no Figma *variables* yet — tokens read directly from frames.
+
+**Tokens (now in `@theme`):** bg `#ffffff`, text `#000000`, accent coral `#d24836`. Fonts: DM Sans (ExtraLight / Regular / SemiBold Italic) + Reenie Beanie.
+
+**Type scale (Figma px @1512 canvas — scale down for responsive web):** headline 98px DM Sans SemiBold Italic (coral text-shadow, tracking ~-4px); nav 40px DM Sans ExtraLight; tagline 40px Reenie Beanie; pronunciation 28px DM Sans ExtraLight Italic underlined; bio 27px DM Sans Regular. Headshot: coral bg, `border-radius: 68px`.
+
+**IA / nav:** `experience · my work · play · beyond code`. Frames: Landing Page `1:2` (hero + bio), my work `38:7`, experience `63:131`, Beyond code `78:14`, play `92:58`. Shared `navbar` component in Figma (top-right).
+
+**Open questions:** (1) single scrolling page + anchors, or routes per section? (2) exact background — pure white vs a warm off-white? (3) where does Contact live (no nav item for it)? **Motion:** the design has animated nodes → pull `get_motion_context` in Phase 3.
+
+**How to pull design context:** Stephanie pastes a Figma **frame/file URL** → Claude loads the `figma-design-to-code` skill (required before `get_design_context`) → reads tokens/layout → mirrors into code. **Cosmos** (cosmos.so) stays the inspo board; reference it for motion/layout calls.
 
 ## 6. Your resumable workflow ("pick up anytime")
 
@@ -163,7 +192,7 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 1. Open the project in **VS Code**, launch **Claude Code**.
 2. Say: *"Read MIGRATION.md and tell me where I left off."* — this doc + the "Where I left off" note below = instant context.
 3. `git status` and `git branch` to see your working state.
-4. Pick the next unchecked box in Phase 4's checklist.
+4. Pick the next unchecked box in the current phase's checklist (§4).
 
 ### During a work slice
 1. `git checkout feat/react-migration && git pull`
@@ -185,11 +214,16 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 ## 7. Where I left off  ✍️ *(update every session)*
 
 - **Last worked:** 2026-09-16
-- **Current branch:** `feat/react-migration` (pushed to origin)
-- **Done:** Phase 0 essentially complete. Scaffold committed (`fe5d8f1`). Tailwind + React Router + `motion` + `lucide-react` installed; Tailwind v4 wired via `@tailwindcss/vite` plugin. Fonts **DM Sans** (headings + body) + **Reenie Beanie** (accent) + system-mono fallback, theme tokens (`--color-ink/paper/muted`, `--font-*`) in `src/index.css` via `@theme` — committed & pushed. Verified in browser: dark bg + DM Sans render.
-- **Vercel:** project `portfolio-project` connected to the GitHub repo. Configured: **Root Directory = `portfolio`**, **Production Branch = `feat/react-migration`**, Framework = Vite. First React build triggers on the next push to that branch.
-  - ⚠️ Gotcha learned: Vercel's *import* wizard browses `main` (which has no `portfolio/`), so the folder isn't selectable there — set Root Directory as a **text field in Settings → Build and Deployment** afterward, and Production Branch under **Settings → Environments → Production**.
-  - At **launch (Phase 4):** merge to `main`, then switch Vercel Production Branch back to `main`, and repoint the Porkbun `.com` DNS from Netlify → Vercel. Old site stays live on Netlify until then.
-- **Vercel URL:** `portfolio-project-sage-psi.vercel.app` (production alias) — will show the React app after the first branch build.
-- **Next action:** confirm the Vercel build from `feat/react-migration` is green and shows the **dark DM Sans Vite starter** (not the old teal-headshot HTML). Then **Phase 0 is DONE** → start **Phase 1 (shell & routing):** `<Nav/>` + `<Button/>`, four page stubs, `App.tsx` layout with `<Outlet/>`, router in `main.tsx` for `/ /about /projects /contact`.
-- **Open questions / notes:** Authorize the **Figma connector** before Phase 3 (design pass). Reminder: after editing `vite.config.ts` or installing packages, **restart the dev server** — `.tsx`/`.css` edits hot-reload, config/deps don't.
+- **Current branch:** `feat/react-migration` (pushed; **today's work is uncommitted — see ⚠️ below**)
+- **Done today:**
+  - **Phase 0 DONE** — Vercel build green; React app live at `portfolio-project-sage-psi.vercel.app` (Root Dir `portfolio`, Production Branch `feat/react-migration`).
+  - **Figma connected LIVE** (see §5). Read the canonical **Landing Page** (node `1:2`; ignore "(old)" frames). Pulled real tokens → `@theme` in `src/index.css`: **light palette** `--color-paper #fff`, `--color-ink #000`, `--color-coral #d24836`; DM Sans + Reenie Beanie. (The old dark theme is gone.)
+  - **Routing decided: multi-page.** IA `/` Home (Landing: hero + bio), `/experience`, `/my-work`, `/play`, `/beyond-code`.
+  - **Phase 1 shell built & verified in browser:** `components/Nav.tsx` (NavLinks + active underline), 5 page stubs in `src/pages/`, `App.tsx` layout (`<Nav/>` + `<Outlet/>`), router in `src/main.tsx`. Navigation works.
+  - **Nav distress texture** (matches Figma): inline SVG `feTurbulence` + `feDisplacementMap` (filter id `#rough`, `scale=4`, `baseFrequency=0.9`) applied ONLY to nav links via `style={{ filter: 'url(#rough)' }}`. Tune: `scale` = roughness, `baseFrequency` = speck size. *(A global page-grain overlay was tried first and reverted — the texture is per-nav-text only.)*
+- **⚠️ Uncommitted:** `src/index.css`, `src/components/Nav.tsx`, `src/pages/*` (5 files), `src/App.tsx`, `src/main.tsx`, `MIGRATION.md`. **Commit these** (next session or now).
+- **Next action:** (1) commit today's work; (2) finish Phase 1 → build the **`<Button/>`** primitive; (3) start Phase 2 → build **Hero + bio** against the Landing Page frame: DM Sans SemiBold Italic headline w/ coral glow, Reenie Beanie tagline, coral headshot, + the pink footer with a **"my resume"** button and the *"made with God's grace + Holy Spirit's inspiration"* line.
+- **🔎 Stephanie's ideas to revisit FIRST next session (raised 2026-09-16):**
+  1. **No "home" link** — after clicking any nav item there's no way back to `/`. Add one (e.g. make the "Stephanie Adéoyè" name/logo clickable → `/`, and/or add a home nav item).
+  2. **Consider merging Home + Experience into one scrollable page.** Rationale: not much internship/technical experience yet to fill a standalone Experience page. This would drop `/experience` as a separate route and fold that content into the Home/Landing scroll. **Decide this before building more** — it changes the nav and routes (nav would become `my work · play · beyond code`, with experience as a Home section).
+- **Open questions / notes:** exact background (pure white vs warm off-white?); where does **Contact** live (no nav item for it?). **Motion** exists on the frames → call `get_motion_context` in Phase 3. Reminder: config/dep changes need a dev-server restart; `.tsx`/`.css` hot-reload.

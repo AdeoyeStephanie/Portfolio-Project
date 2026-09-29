@@ -143,11 +143,11 @@ main ─────────────────────────
 - [ ] **my work** — project cards (Figma "my work" frame); repeated data → `src/data/projects.ts`
 - [ ] **experience** — Figma "experience" frame
 - [ ] **beyond code** — category cards (Figma "Beyond code" frame)
-- [ ] **play** — Figma "play" frame
+- [ ] **play** — memory-card scavenger hunt (see "Play section — decided 2026-09-29" below; Figma section `play_scopes` `320:67`)
 - [ ] Icons via **lucide-react** (not the old Font Awesome CDN); copy resume PDF + headshot into `portfolio/public/`
 
 ### Phase 3 — Motion, responsive & polish ⬜
-- [ ] Responsive / mobile pass (the old site isn't responsive — kill the fixed pixel offsets like `gap: 290px`, `left: 70%`)
+- [ ] Responsive / mobile pass — **deferred: building desktop-first for now** (the old site isn't responsive — kill the fixed pixel offsets like `gap: 290px`, `left: 70%`)
 - [ ] Motion with `motion`: page transitions, hover states, subtle entrance animations (tasteful Reenie Beanie accents where they fit)
 - [ ] Accessibility + Lighthouse check
 - [ ] Final design re-sync against the latest Figma frames
@@ -181,6 +181,23 @@ Figma is connected **live** to this Claude Code session (confirmed via `whoami` 
 **IA / nav:** `experience · my work · play · beyond code`. Frames: Landing Page `1:2` (hero + bio), my work `38:7`, experience `63:131`, Beyond code `78:14`, play `92:58`. Shared `navbar` component in Figma (top-right).
 
 **Open questions:** (1) single scrolling page + anchors, or routes per section? (2) exact background — pure white vs a warm off-white? (3) where does Contact live (no nav item for it)? **Motion:** the design has animated nodes → pull `get_motion_context` in Phase 3.
+
+### Play section — decided 2026-09-29
+
+Figma section **`play_scopes (chosen: C + B + D + E)`** (`320:67`, nested inside `play_section`). Chosen: **Scope C (scavenger hunt) as the hub + Scope B (café) as a sub-page + D (collect moment) + E (deck)**. Scope A (binder only) was deleted from Figma.
+- **Concept:** 12 "memory" trading cards (memories, not cities — Stephanie doesn't travel outside the US). Clues around the whole site lead to cards; the reward is a card people can **save as .png**. Finishing all 12 unlocks a secret 13th.
+- **Card design** (`00 · the card`, components `320:69` holo / `320:80` rare / `320:90` common / `321:67` face-down / `321:72` story side / `321:83` locked slot): inspired by Evan Fasquelle's trading-card portfolio (foil body + 3D tilt, thin inner rule, tiny uppercase corner labels, script title over big light numerals, dotted empty slots), re-skinned in coral/paper + DM Sans/Reenie Beanie with polaroid-sticker photos.
+- **Flow:** play page = clue board (`321:311`) with "stations". The café station links to the café page (`321:186`): build a drink → the receipt prints → a card slides out. "← back to the hunt" returns. These links are set up in Figma prototype mode.
+- **Collect animation** (`321:406`), ~2.5s and skippable: trigger sparkle → face-down card pops up → Y-flip → holo sweep + confetti + keep/save .png → shrinks along an arc into the nav deck, badge +1. Respect `prefers-reduced-motion`.
+- **Deck** (`321:563`): nav deck icon with a count badge on every page → right drawer with a grid, locked slots that show their clue, and the selected card + its story side.
+- **Build notes:** `motion` for the spring and the fly-into-deck animation; holo via CSS gradients driven by cursor position (ref: simeydotme/pokemon-cards-css); `canvas-confetti`; `html-to-image` for save .png; collected state in `localStorage` (no login).
+- **Prototype screens (built 2026-09-29, 1512×982, no annotations):** the `play` frame `92:58` is now the hunt hub (clues, stations, progress, "your cards" strip, deck button). Section **`play_screens (prototype)`** `329:428` (nested inside `play_section`, 4-column grid) holds: `café / order` → `café / receipt` → `collect / 1 pop` → `collect / 2 flip` → `collect / 3 reveal` → `collect / 4 into deck`, then `deck / open` → `deck / card front` ⇄ `deck / card story`. In every collect screen the card has the same layer name, `card (click to collect)`, so Smart Animate can match it between screens. Cards are one component set, `memory card` (`329:263`, property `type`); nav deck = component `deck button` (`329:264`, `count` property). Only the café station and the back links are connected; Stephanie is doing the rest of the prototype wiring.
+- **Card split (decided):** 12 cards = **5 from the café** (each drink recipe gives one fixed card, never random) + **7 from exploring the portfolio** (clues around home / my work / beyond code / play).
+- **Desktop only for now** (1512 canvas). Mobile layout for the hunt + deck drawer is deferred to a later responsive pass (Phase 3).
+- **Still to decide:** the real 12 memories + their clues; the 5 drink recipes and which memory each one maps to.
+- **Polaroid wall (built 2026-09-29):** a sub-page opened from the hub's polaroid-wall station. A board of 9 polaroids from different projects (photos are placeholders; some are coloured blocks). **Dragging** a polaroid shows whether it's a card: a normal one reveals "nope, just a photo :)" and springs back; the special one (layer name `card (click to collect)`) glitters, then turns into the face-down card and plays the same pop → flip → reveal → into-deck sequence as the café. Afterwards the board shows a "found ✦" slot. Screens are in `play_screens (prototype)` rows 4–5 (`polaroid wall / …`), with the flow `play — polaroid wall`. In the prototype, only "the mirror" and the special polaroid can be dragged.
+- **Finale — the 13th card (built 2026-09-29):** after all 12 are collected: "you found all 12" (the 12 cards in a row) → the cards spin in a 3D ring around the "sa." mark (inspired by the ring gallery on risingfounder.net; faked in Figma with depth-scaled and width-squashed cards, backs showing face-down) → they collapse into a glowing stack → the **secret 13th card** (new `type=secret` variant: black + gold foil, "13/12") on a dark screen with save .png / see my deck. Screens are `finale / 1–6` in `play_screens` rows 6–7, and they play by themselves with Smart Animate (the flow is `play — finale (all 12 → 13th card)`). The ring cards are named `ring card 1…12`, which is what Smart Animate uses to match them between screens. In code this will be a real 3D ring (CSS `rotateY` + `translateZ`, or three.js) that visitors can also drag to spin. Data: `SECRET_MEMORY` in `memories.ts`.
+- **Data file (placeholder, 2026-09-29):** `portfolio/src/data/memories.ts` holds all 12 cards (5 `cafe` with `recipe` + `menuHint`, 7 `explore` with `page` + `clue` + `hidingSpot`), the café option lists, and helpers (`findMemoryByRecipe`, `memoriesOnPage`, `formatNumber`, …). When the real memories are chosen, only this file changes. A dev-only check warns in the console about duplicate ids, numbers or recipes, or a split other than 5 + 7.
 
 **How to pull design context:** Stephanie pastes a Figma **frame/file URL** → Claude loads the `figma-design-to-code` skill (required before `get_design_context`) → reads tokens/layout → mirrors into code. **Cosmos** (cosmos.so) stays the inspo board; reference it for motion/layout calls.
 

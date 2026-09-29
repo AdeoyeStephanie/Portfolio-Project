@@ -142,7 +142,7 @@ main ─────────────────────────
 - [ ] **Hero + bio** (top of Landing Page): name headline (DM Sans SemiBold Italic, coral glow), pronunciation, Reenie Beanie tagline, coral headshot; "who is Stephanie" bio paragraphs
 - [ ] **my work** — project cards (Figma "my work" frame); repeated data → `src/data/projects.ts`
 - [ ] **experience** — Figma "experience" frame
-- [ ] **beyond code** — category cards (Figma "Beyond code" frame)
+- [ ] **beyond code** — category cards (Figma "Beyond code" frame `78:14`) → 3 sub-pages, drafted 2026-09-29 in `beyond_code_section`: **people** `364:1851` (filter chips + event cards, each with 3 fanned polaroids, role/place/date and a note), **film** `364:1957` (profile row + series chips + a 5×2 grid of vertical reel previews in polaroid-style frames; every reel links out to Instagram, and the handle/URL are placeholders), **far and sweet** `364:1904` (an entry index + alternating journal spreads: taped polaroid + lined journal page with place, date, "taken at" time/light/weather, a handwritten story, and "felt:" mood chips). All photos and text are placeholders. Data → `src/data/{events,films,journal}.ts` when built.
 - [ ] **play** — memory-card scavenger hunt (see "Play section — decided 2026-09-29" below; Figma section `play_scopes` `320:67`)
 - [ ] Icons via **lucide-react** (not the old Font Awesome CDN); copy resume PDF + headshot into `portfolio/public/`
 

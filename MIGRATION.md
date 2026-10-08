@@ -230,9 +230,9 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 
 ## 7. Where I left off  ✍️ *(update every session)*
 
-- **Last worked:** 2026-10-06
-- **Current branch:** `feat/react-migration` (**this session's work is UNCOMMITTED — see ⚠️ below**)
-- **Done this session:**
+- **Last worked:** 2026-10-08
+- **Current branch:** `feat/react-migration` (clean — the Home build is **committed** as `6b4e997 feat: created home page with about, images and professional experience details`)
+- **Done in the last work session (2026-10-06, now committed):**
   - **Re-checked Figma live** (design had grown a lot). Home is now one scrolling **Landing Page** (`1:2`, 3585px tall): hero + bio + professional experiences. Figma nav is now `home · my work · play · beyond code`. Confirmed the **Home + Experience merge**.
   - **Built the Home page** from the live Figma — hero, bio + 2 polaroids, 3 experience cards (→ `/experience/:slug`), pink footer with real social links. **Responsive flex layout**, deliberately NOT Figma's absolute positioning.
   - **Nav** → `home · my work · play · beyond code`; **active = coral, hover = bold**. The "home" item fixes the old "no way back" gap. Moved the `#rough` distress filter into `App.tsx` so nav + cards share it.
@@ -240,11 +240,8 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
   - **Name forced to one line** (`clamp(2rem,6vw,5rem)` + `whitespace-nowrap`).
   - **Images downloaded + optimized** into `public/` (headshot, 2 polaroids, divider, card border): **17 MB → ~360 KB**.
   - `npm run build` passes; verified in browser (name one line, nav coral/bold, pen border, cards).
-- **⚠️ Uncommitted — per-file breakdown for the commit (also `git status`):**
-  - **New files:** `src/components/{Polaroid,ExperienceCard,Footer}.tsx`, `src/data/experiences.ts`, `src/pages/ExperienceDetail.tsx`, `public/{headshot.jpg,polaroid-fall.jpg,polaroid-desk.jpg,divider.svg,exp-card-border.svg}`
-  - **Modified:** `src/pages/Home.tsx` (full hero/bio/experiences/footer build + one-line name), `src/components/Nav.tsx` (new labels + coral-active/bold-hover), `src/App.tsx` (shared `#rough` filter, removed inner `<main>` wrapper), `src/main.tsx` (new routes + `/experience/:slug`), `src/pages/{MyWork,Play}.tsx` (your comment tweaks only), `MIGRATION.md`
-  - **Deleted:** `src/pages/Experience.tsx` (standalone experience page — merged into Home)
-- **Next action:** commit, then build the remaining sections — **my work** (uses `src/data/memories.ts`, 13 trading cards), **beyond code** (people / film / far-and-sweet sub-pages), **play** (memory-card scavenger hunt), and fill the **experience detail** write-ups. Then **Phase 4 launch**: cut the Porkbun `.com` from Netlify → Vercel.
+  - New files landed: `src/components/{Polaroid,ExperienceCard,Footer}.tsx`, `src/data/experiences.ts`, `src/pages/ExperienceDetail.tsx` (stub), `public/{headshot.jpg,polaroid-fall.jpg,polaroid-desk.jpg,divider.svg,exp-card-border.svg}`. Deleted the standalone `src/pages/Experience.tsx` (merged into Home).
+- **Next action:** ⚠️ *design changed 2026-10-08: experiences are now an **overlay/modal on Home** (with ←/→ between them), not `/experience/:slug` pages — so build an `ExperienceModal` opened from `ExperienceCard` (state on Home, or a `?exp=slug` search param so it's linkable) and drop/redirect the `ExperienceDetail` route.* Original note: build the **experience detail pages** (the page that opens when you click a professional-experience card). Today they're a clean stub — `src/pages/ExperienceDetail.tsx` looks up the `:slug` and shows role/org/dates/tags + "Full write-up coming soon," and `src/data/experiences.ts` only carries the 3 cards' thin data (slug/role/org/dates/tags). To build: **re-pull the 3 Figma frames live** (`364:1837` SE research intern, `364:1838` academic enrichment tutor, `378:2067` director of sponsorships & outreach — design changes often), **expand the `Experience` type + data** (at-a-glance, what-i-did, tools, skills chips, moments polaroids, note-to-self quote, hero photo), then **build out `ExperienceDetail.tsx`** (reusing `Polaroid` + `Footer`) with **prev/next** links between the three. After that, the other Phase 2 sections remain: **my work** (`src/data/memories.ts`, 13 cards), **beyond code** (people / film / far-and-sweet), **play** (scavenger hunt). Then **Phase 4 launch**: cut the Porkbun `.com` from Netlify → Vercel.
 - **To verify yourself:** the **footer social links** point at the old LinkedIn/GitHub/email — confirm they're current.
-- **Resolved from last time:** ✅ home link (nav "home"); ✅ Home + Experience merged.
+- **Resolved from last time:** ✅ home link (nav "home"); ✅ Home + Experience merged; ✅ Home build committed (`6b4e997`).
 - **Notes:** building **desktop-first** (responsive pass = Phase 3); **motion** still pending (Phase 3 → `get_motion_context`). Config/dep changes need a dev-server restart; `.tsx`/`.css` hot-reload.

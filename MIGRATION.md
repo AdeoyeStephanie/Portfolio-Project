@@ -132,14 +132,14 @@ main ─────────────────────────
 
 ### Phase 1 — Design tokens + shell & routing ⬜
 - [x] **Pull real tokens from Figma → `@theme` in `src/index.css`** (2026-09-16). Light palette: `--color-paper #ffffff` (bg), `--color-ink #000000` (text), `--color-coral #d24836` (accent — headshot backdrop + the glow behind the name). `--font-sans` DM Sans (all weights: ExtraLight nav, Regular body, SemiBold Italic headline), `--font-script` Reenie Beanie. → utilities `bg-paper` / `text-ink` / `text-coral` / `font-sans` / `font-script`.
-- [x] `<Nav/>` component: `experience · my work · play · beyond code` (DM Sans ExtraLight) with active-underline + hover; **distress texture** via SVG `#rough` filter (see "Where I left off"). Sizing/spacing to be fine-tuned against Figma in Phase 2.
-- [ ] `<Button/>` primitive (variants matched to Figma) ← *next*
-- [x] Router + `App.tsx` shell (`<Nav/>` + `<Outlet/>`). **Multi-page routes:** `/` = Home (Landing: hero + bio), `/experience`, `/my-work`, `/beyond-code`, `/play`. Nav = React Router `NavLink`s. Verified in browser.
-- [x] Section/page components as route targets (`src/pages/`: Home, Experience, MyWork, Play, BeyondCode — stubs; content in Phase 2)
+- [x] `<Nav/>` component: `home · my work · play · beyond code` (DM Sans). **Active page = coral, hover = bold**, inactive = extralight. **Distress texture** via SVG `#rough` filter — now defined once in `App.tsx` and shared by nav + cards.
+- [ ] `<Button/>` primitive — deferred; no generic button needed yet ("learn more" / resume handled inline)
+- [x] Router + `App.tsx` shell (`<Nav/>` + `<Outlet/>`). **Routes:** `/` Home, `/my-work`, `/play`, `/beyond-code`, `/experience/:slug` (detail). Experience merged into Home — no standalone `/experience`.
+- [x] Page components in `src/pages/`: **Home (built)**, MyWork/Play/BeyondCode (stubs), ExperienceDetail (stub). Removed old standalone `Experience.tsx`.
 
 ### Phase 2 — Sections (build each against its Figma frame; one branch each) ⬜
 *Old Home/About/Projects/Contact structure is abandoned — the Figma IA below is the source of truth.*
-- [ ] **Hero + bio** (top of Landing Page): name headline (DM Sans SemiBold Italic, coral glow), pronunciation, Reenie Beanie tagline, coral headshot; "who is Stephanie" bio paragraphs
+- [x] **Home page built (2026-10-06)** — hero (one-line name headline w/ coral glow, pronunciation, Reenie Beanie tagline, coral headshot), bio + 2 polaroids, **professional experiences** list (3 cards w/ Figma pen border → link to `/experience/:slug` stubs), pink footer w/ socials. Built responsively (flex, NOT Figma's absolute coords). New: `Polaroid`, `ExperienceCard`, `Footer`, `experiences.ts`.
 - [ ] **my work** — project cards (Figma "my work" frame); repeated data → `src/data/projects.ts`
 - [ ] **experience** — the experience cards on the Landing Page each open a detail page (drafted 2026-09-29 in `home_section`, next to the Landing Page): `364:1837` SE research intern, `364:1838` academic enrichment tutor, `378:2067` director of sponsorships & outreach. Each page has: a role headline (name-headline style with coral shadow) + org/dates/tags + a hero polaroid; an "at a glance" box (role/team/where/when, reusing the card's hand-drawn border); ☆ what i did + a tools card; ☆ skills i picked up (chips); ☆ moments (4 polaroids); a note-to-self quote; prev/next links; and the home footer. All body text is placeholder. Data → `src/data/experiences.ts` when built.
 - [ ] **beyond code** — category cards (Figma "Beyond code" frame `78:14`) → 3 sub-pages, drafted 2026-09-29 in `beyond_code_section`: **people** `364:1851` (filter chips + event cards, each with 3 fanned polaroids, role/place/date and a note), **film** `364:1957` (profile row + series chips + a 5×2 grid of vertical reel previews in polaroid-style frames; every reel links out to Instagram, and the handle/URL are placeholders), **far and sweet** `364:1904` (an entry index + alternating journal spreads: taped polaroid + lined journal page with place, date, "taken at" time/light/weather, a handwritten story, and "felt:" mood chips). All photos and text are placeholders. Data → `src/data/{events,films,journal}.ts` when built.
@@ -230,17 +230,21 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 
 ## 7. Where I left off  ✍️ *(update every session)*
 
-- **Last worked:** 2026-09-16
-- **Current branch:** `feat/react-migration` (pushed; **today's work is uncommitted — see ⚠️ below**)
-- **Done today:**
-  - **Phase 0 DONE** — Vercel build green; React app live at `portfolio-project-sage-psi.vercel.app` (Root Dir `portfolio`, Production Branch `feat/react-migration`).
-  - **Figma connected LIVE** (see §5). Read the canonical **Landing Page** (node `1:2`; ignore "(old)" frames). Pulled real tokens → `@theme` in `src/index.css`: **light palette** `--color-paper #fff`, `--color-ink #000`, `--color-coral #d24836`; DM Sans + Reenie Beanie. (The old dark theme is gone.)
-  - **Routing decided: multi-page.** IA `/` Home (Landing: hero + bio), `/experience`, `/my-work`, `/play`, `/beyond-code`.
-  - **Phase 1 shell built & verified in browser:** `components/Nav.tsx` (NavLinks + active underline), 5 page stubs in `src/pages/`, `App.tsx` layout (`<Nav/>` + `<Outlet/>`), router in `src/main.tsx`. Navigation works.
-  - **Nav distress texture** (matches Figma): inline SVG `feTurbulence` + `feDisplacementMap` (filter id `#rough`, `scale=4`, `baseFrequency=0.9`) applied ONLY to nav links via `style={{ filter: 'url(#rough)' }}`. Tune: `scale` = roughness, `baseFrequency` = speck size. *(A global page-grain overlay was tried first and reverted — the texture is per-nav-text only.)*
-- **⚠️ Uncommitted:** `src/index.css`, `src/components/Nav.tsx`, `src/pages/*` (5 files), `src/App.tsx`, `src/main.tsx`, `MIGRATION.md`. **Commit these** (next session or now).
-- **Next action:** (1) commit today's work; (2) finish Phase 1 → build the **`<Button/>`** primitive; (3) start Phase 2 → build **Hero + bio** against the Landing Page frame: DM Sans SemiBold Italic headline w/ coral glow, Reenie Beanie tagline, coral headshot, + the pink footer with a **"my resume"** button and the *"made with God's grace + Holy Spirit's inspiration"* line.
-- **🔎 Stephanie's ideas to revisit FIRST next session (raised 2026-09-16):**
-  1. **No "home" link** — after clicking any nav item there's no way back to `/`. Add one (e.g. make the "Stephanie Adéoyè" name/logo clickable → `/`, and/or add a home nav item).
-  2. **Consider merging Home + Experience into one scrollable page.** Rationale: not much internship/technical experience yet to fill a standalone Experience page. This would drop `/experience` as a separate route and fold that content into the Home/Landing scroll. **Decide this before building more** — it changes the nav and routes (nav would become `my work · play · beyond code`, with experience as a Home section).
-- **Open questions / notes:** exact background (pure white vs warm off-white?); where does **Contact** live (no nav item for it?). **Motion** exists on the frames → call `get_motion_context` in Phase 3. Reminder: config/dep changes need a dev-server restart; `.tsx`/`.css` hot-reload.
+- **Last worked:** 2026-10-06
+- **Current branch:** `feat/react-migration` (**this session's work is UNCOMMITTED — see ⚠️ below**)
+- **Done this session:**
+  - **Re-checked Figma live** (design had grown a lot). Home is now one scrolling **Landing Page** (`1:2`, 3585px tall): hero + bio + professional experiences. Figma nav is now `home · my work · play · beyond code`. Confirmed the **Home + Experience merge**.
+  - **Built the Home page** from the live Figma — hero, bio + 2 polaroids, 3 experience cards (→ `/experience/:slug`), pink footer with real social links. **Responsive flex layout**, deliberately NOT Figma's absolute positioning.
+  - **Nav** → `home · my work · play · beyond code`; **active = coral, hover = bold**. The "home" item fixes the old "no way back" gap. Moved the `#rough` distress filter into `App.tsx` so nav + cards share it.
+  - **Experience card border** now uses Figma's actual **pen SVG** (`public/exp-card-border.svg`) instead of the `#rough`-filtered CSS border (which looked pencil-like).
+  - **Name forced to one line** (`clamp(2rem,6vw,5rem)` + `whitespace-nowrap`).
+  - **Images downloaded + optimized** into `public/` (headshot, 2 polaroids, divider, card border): **17 MB → ~360 KB**.
+  - `npm run build` passes; verified in browser (name one line, nav coral/bold, pen border, cards).
+- **⚠️ Uncommitted — per-file breakdown for the commit (also `git status`):**
+  - **New files:** `src/components/{Polaroid,ExperienceCard,Footer}.tsx`, `src/data/experiences.ts`, `src/pages/ExperienceDetail.tsx`, `public/{headshot.jpg,polaroid-fall.jpg,polaroid-desk.jpg,divider.svg,exp-card-border.svg}`
+  - **Modified:** `src/pages/Home.tsx` (full hero/bio/experiences/footer build + one-line name), `src/components/Nav.tsx` (new labels + coral-active/bold-hover), `src/App.tsx` (shared `#rough` filter, removed inner `<main>` wrapper), `src/main.tsx` (new routes + `/experience/:slug`), `src/pages/{MyWork,Play}.tsx` (your comment tweaks only), `MIGRATION.md`
+  - **Deleted:** `src/pages/Experience.tsx` (standalone experience page — merged into Home)
+- **Next action:** commit, then build the remaining sections — **my work** (uses `src/data/memories.ts`, 13 trading cards), **beyond code** (people / film / far-and-sweet sub-pages), **play** (memory-card scavenger hunt), and fill the **experience detail** write-ups. Then **Phase 4 launch**: cut the Porkbun `.com` from Netlify → Vercel.
+- **To verify yourself:** the **footer social links** point at the old LinkedIn/GitHub/email — confirm they're current.
+- **Resolved from last time:** ✅ home link (nav "home"); ✅ Home + Experience merged.
+- **Notes:** building **desktop-first** (responsive pass = Phase 3); **motion** still pending (Phase 3 → `get_motion_context`). Config/dep changes need a dev-server restart; `.tsx`/`.css` hot-reload.

@@ -1,8 +1,8 @@
-// Pink band footer (coral at 25% opacity, from the Figma footer fill).
-// Left: credit line. Right: real social links (Figma had a "add socials"
-// placeholder — wired to your actual profiles; verify the URLs are current).
+// Pink band footer on home page and it's sub pages
 // NOTE: lucide-react dropped brand icons, so these are text links for now —
 // easy to swap for icons later (e.g. react-icons) if you want the glyphs.
+import ResumeButton from './ResumeButton'
+
 const socials = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/stephanie-adeoye-2a3b70291/' },
   { label: 'GitHub', href: 'https://github.com/AdeoyeStephanie' },
@@ -25,6 +25,7 @@ export default function Footer() {
             {label}
           </a>
         ))}
+        <ResumeButton variant="pill" />
       </div>
     </footer>
   )

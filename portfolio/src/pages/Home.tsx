@@ -2,6 +2,7 @@
 import Polaroid from '../components/Polaroid'
 import ExperienceCard from '../components/ExperienceCard'
 import ExperienceModal from '../components/ExperienceModal'
+import ResumeButton from '../components/ResumeButton'
 import Footer from '../components/Footer'
 import { experiences } from '../data/experiences'
 
@@ -75,6 +76,11 @@ export default function Home() {
             {experiences.map((exp) => (
               <ExperienceCard key={exp.slug} exp={exp} />
             ))}
+          </div>
+
+          {/* View the full resume (PDF opens in a new tab). */}
+          <div className="mt-12 flex justify-center">
+            <ResumeButton variant="full" />
           </div>
         </section>
       </div>

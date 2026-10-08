@@ -1,4 +1,4 @@
-//storing all my professional experiences on the homepage 
+//Design for the professional experience cards, does not include text
 
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'

@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import type { Experience } from '../data/experiences'
 
-// One "professional experience" card. The whole card is a link to its detail
-// page. The hand-drawn border is a separate layer so the #rough filter can
+// One "professional experience" card. Clicking it opens the experience OVERLAY
+// by setting `?exp=<slug>` on the URL (Home watches that param and renders the
+// modal). The hand-drawn border is a separate layer so the #rough filter can
 // distress ONLY the border, leaving the text crisp.
 export default function ExperienceCard({ exp }: { exp: Experience }) {
   return (
     <Link
-      to={`/experience/${exp.slug}`}
+      to={`?exp=${exp.slug}`}
       className="group relative flex flex-col gap-4 px-8 py-7 transition-transform hover:-translate-y-0.5 sm:flex-row sm:items-center sm:justify-between"
     >
       {/* Figma's hand-drawn pen border (46039.svg) stretched to the card.

@@ -1,6 +1,7 @@
 //portfolio home/landing page
 import Polaroid from '../components/Polaroid'
 import ExperienceCard from '../components/ExperienceCard'
+import ExperienceModal from '../components/ExperienceModal'
 import Footer from '../components/Footer'
 import { experiences } from '../data/experiences'
 
@@ -19,8 +20,8 @@ export default function Home() {
               /ˈstɛfəni/ + ah-DAY-oh-YEH
             </p>
             <p className="mt-8 max-w-xl font-script text-3xl leading-tight text-ink">
-              aspiring design engineer exploring the intersection of code, design and artificial
-              intelligence models
+              aspiring design engineer exploring all things code, design and artificial intelligence
+               
             </p>
           </div>
           <img
@@ -36,13 +37,15 @@ export default function Home() {
         <section className="flex flex-col items-start gap-12 lg:flex-row lg:justify-between">
           <div className="max-w-md space-y-5 font-sans text-lg leading-relaxed text-ink">
             <p>
-              Born and raised in Ilorin Nigeria, i’m a lover of the arts who found herself in STEM
-              classes before i could nurture that passion.
+              Born and raised in Ilorin Nigeria, I’m a lover of the arts who found herself in STEM
+              classes before I could nurture that passion.
             </p>
             <p>
               I like to call myself an engineer who loves to design. Most of my projects start off
-              from a crazy idea i came up with randomly and the part that most excites me is wire
-              framing and bringing said wireframes to life through code.
+              from a crazy idea I came up with randomly. I work from design to functionality because it gets me excited about the end result.
+            </p>
+            <p>
+              Outside of tech, you'll find me making content, cooking and finding new ways to bring people together.
             </p>
           </div>
           <div className="flex flex-col items-center gap-6 self-center sm:flex-row lg:self-start">
@@ -77,6 +80,9 @@ export default function Home() {
       </div>
 
       <Footer />
+
+      {/* Experience overlay — shows itself when the URL has ?exp=<slug>. */}
+      <ExperienceModal experiences={experiences} />
     </>
   )
 }

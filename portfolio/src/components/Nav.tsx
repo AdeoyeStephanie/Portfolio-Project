@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom'
 
-// The 4 nav sections, straight from Figma (top-right). Each is its own route.
+// Nav now matches the current Figma: home · my work · play · beyond code.
+// "home" (→ /) fixes the "no way back" problem. The active link is bold,
+// others extralight — exactly as the design shows.
 const links = [
-  { to: '/experience', label: 'experience' },
+  { to: '/', label: 'home', end: true },
   { to: '/my-work', label: 'my work' },
   { to: '/play', label: 'play' },
   { to: '/beyond-code', label: 'beyond code' },
@@ -10,30 +12,20 @@ const links = [
 
 export default function Nav() {
   return (
-    <>
-      {/* Figma Texture feature on navbar.
-          Tune: scale = how rough, baseFrequency = speck size. */}
-      <svg width="0" height="0" aria-hidden="true" className="absolute">
-        <filter id="rough" x="-15%" y="-15%" width="130%" height="130%">
-          <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2" seed="7" result="n" />
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
-
-      <nav className="flex justify-end gap-8 px-10 py-8 font-sans text-2xl font-extralight tracking-tight">
-        {links.map(({ to, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            style={{ filter: 'url(#rough)' }}
-            className={({ isActive }) =>
-              `transition-opacity hover:opacity-60 ${isActive ? 'underline underline-offset-4' : ''}`
-            }
-          >
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-    </>
+    <nav className="flex flex-wrap justify-end gap-8 px-10 py-8 font-sans text-2xl tracking-tight">
+      {links.map(({ to, label, end }) => (
+        <NavLink
+          key={to}
+          to={to}
+          end={end}
+          style={{ filter: 'url(#rough)' }} // distress texture (filter defined once in App)
+          className={({ isActive }) =>
+            `transition-colors hover:font-bold ${isActive ? 'text-coral' : 'font-extralight'}`
+          }
+        >
+          {label}
+        </NavLink>
+      ))}
+    </nav>
   )
 }

@@ -56,17 +56,19 @@ export const experiences: Experience[] = [
     },
     whatIDid: {
       paragraph:
-        'placeholder — describe the problem you worked on, who it was for, and what you built or changed. keep it to 3–4 sentences so it reads like a note, not a résumé.',
+      'Making audio listening experiences more accessible and interactive — turning linear audio into something you can read, search, and navigate by word on mobile.',
       highlights: [
-        'placeholder — a thing you built or shipped',
-        'placeholder — a result (numbers are great here)',
-        'placeholder — something you led or improved',
-      ],
+        'feature — built "Interactive Mode," a full-screen transcript view where users tap any word to jump to that moment, search the transcript to jump between matches, and follow a live-highlighted word that auto-scrolls as audio plays',
+        'accessibility — enabled iOS users to fast-forward audio in the browser without it cutting to silence, by remote-debugging on-device with Safari Web Inspector and fixing an iOS Safari Web Audio bug',
+        'tool — a full-stack web app for scrubbing and navigating audio content, with a vanilla-JavaScript front end and a Netlify Functions backend',
+        'improvement — cut per-update DOM work from O(n) to O(1) by caching transcript-word element lookups and resolved a decay-timer race condition, smoothing real-time playback and gesture response on mobile',
+  ],
     },
-    tools: ['[tool]', '[tool]', '[tool]', '[language]', '[framework]', '[design tool]'],
+    tools: ['[JavaScript]', '[Web Audio API]', '[MediaPipe]', '[Howler.js]', '[Netlify Functions]', '[Git/GitHub]', '[Claude Code]'],
+    // skills i picked up
     skills: {
-      technical: ['[technical skill]', '[technical skill]', '[technical skill]'],
-      soft: ['[soft skill]', '[soft skill]', '[something you got better at]'],
+      technical: ['[user research]', '[full-stack development]', '[cross-browser / on-device debugging]', '[performance optimization]'],
+      soft: ['systematic problem-solving', 'communication'],
     },
     moments: [
       { tint: '#b8ccf2', caption: '[caption]' },
@@ -74,7 +76,7 @@ export const experiences: Experience[] = [
       { tint: '#9ebd73', caption: '[caption]' },
       { tint: '#f5a873', caption: '[caption]' },
     ],
-    note: 'placeholder — the one thing i’ll carry with me from this role.',
+    note: 'stepping into a new role is scary, but you gain confidence with each challenge.',
   },
 
 
@@ -85,27 +87,27 @@ export const experiences: Experience[] = [
     dates: "fall '25 – present",
     tags: ['on-campus', 'academia', 'tutoring'],
     oneLiner:
-      'placeholder — one or two sentences on what this role was and why it mattered to you.',
+      'my first job in college',
     hero: { tint: '#b8ccf2', caption: '[photo caption]' },
     glance: {
       role: 'Academic Enrichment Tutor',
-      team: '[team / department]',
+      team: '[Academic Enrichment Program (AEP) ]',
       where: 'Baltimore, MD',
       when: "fall '25 – present",
     },
     whatIDid: {
       paragraph:
-        'placeholder — describe who you tutored, in what subjects, and how you helped them. keep it to 3–4 sentences so it reads like a note, not a résumé.',
+        'tutoring students in computer science and mathematics as well as general education courses',
       highlights: [
-        'placeholder — a thing you built or shipped',
-        'placeholder — a result (numbers are great here)',
-        'placeholder — something you led or improved',
+        'events- hosting monthly workshops and study sessions',
+        'service — serving the university community at volunteer events',
+        'learning — breaking down complex conepts to make them more understandable',
       ],
     },
-    tools: ['[tool]', '[tool]', '[tool]', '[subject]', '[subject]'],
+    tools: ['[navigateEAB]', '[Canva]', '[tool]', '[subject]', '[subject]'],
     skills: {
-      technical: ['[technical skill]', '[technical skill]'],
-      soft: ['communication', 'patience', '[something you got better at]'],
+      technical: [],
+      soft: ['communication', 'patience', 'empathy'],
     },
     moments: [
       { tint: '#f5a873', caption: '[caption]' },
@@ -113,7 +115,7 @@ export const experiences: Experience[] = [
       { tint: '#b8ccf2', caption: '[caption]' },
       { tint: '#f0d9c7', caption: '[caption]' },
     ],
-    note: 'placeholder — the one thing i’ll carry with me from this role.',
+    note: 'teaching others the basics of programming often helps me solidify my own understanding.',
   },
 
   /*morganhacks role */
@@ -124,7 +126,7 @@ export const experiences: Experience[] = [
     dates: "fall '24 – present",
     tags: ['people', 'leadership', 'outreach'],
     oneLiner:
-      'placeholder — one or two sentences on what this role was and why it mattered to you.',
+      'Joined a team of passionate individuals to organize the largest HBCU hosted hackathon in Maryland.',
     hero: { tint: '#f0d9c7', caption: '[photo caption]' },
     glance: {
       role: 'Director of Sponsorships & Outreach',
@@ -136,14 +138,14 @@ export const experiences: Experience[] = [
       paragraph:
         'placeholder — describe who you reached out to, what you organised, and the impact on the hackathon. keep it to 3–4 sentences so it reads like a note, not a résumé.',
       highlights: [
-        'placeholder — a sponsor you landed',
-        'placeholder — a result (numbers are great here)',
-        'placeholder — something you led or improved',
+        'sponsors — maintained sponsor relationships and secured new partnerships',
+        'prizes — increased prizes by 40% from the previous year, the highest in the event’s history',
+        'challenges — navigated a sponsor drop out and reorganized event budget',
       ],
     },
-    tools: ['[tool]', '[tool]', 'Notion', 'email', '[design tool]'],
+    tools: ['[VS Code]', '[Canva]','[Figma]',  'Notion', 'email',],
     skills: {
-      technical: ['[technical skill]', '[technical skill]'],
+      technical: [],
       soft: ['negotiation', 'outreach', 'leadership'],
     },
     moments: [
@@ -152,6 +154,6 @@ export const experiences: Experience[] = [
       { tint: '#f0d9c7', caption: '[caption]' },
       { tint: '#b8ccf2', caption: '[caption]' },
     ],
-    note: 'placeholder — the one thing i’ll carry with me from this role.',
+    note: 'long hours, no pay, but creating a space for students to bring their ideas to life ',
   },
 ]

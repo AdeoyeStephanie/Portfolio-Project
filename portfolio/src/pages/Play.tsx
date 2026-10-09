@@ -1,4 +1,11 @@
-// play page that contains cafe and polaroid shuffler 
+// play page that contains cafe and polaroid shuffler
+import ComingSoon from '../components/ComingSoon'
+
 export default function Play() {
-  return <h1 className="font-sans text-4xl">play</h1>
+  return (
+    <ComingSoon
+      title="play"
+      note="a little scavenger hunt lives here. i’m still hiding the cards — come back to play ✦"
+    />
+  )
 }

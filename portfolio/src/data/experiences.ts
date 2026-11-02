@@ -136,14 +136,14 @@ export const experiences: Experience[] = [
     },
     whatIDid: {
       paragraph:
-        'placeholder — describe who you reached out to, what you organised, and the impact on the hackathon. keep it to 3–4 sentences so it reads like a note, not a résumé.',
+        'reaching out to potential sponsors and partners to secure financialsupport for the hackathon.',
       highlights: [
         'sponsors — maintained sponsor relationships and secured new partnerships',
         'prizes — increased prizes by 40% from the previous year, the highest in the event’s history',
         'challenges — navigated a sponsor drop out and reorganized event budget',
       ],
     },
-    tools: ['[VS Code]', '[Canva]','[Figma]',  'Notion', 'email',],
+    tools: ['Canva', 'Notion', 'email',],
     skills: {
       technical: [],
       soft: ['negotiation', 'outreach', 'leadership'],
@@ -154,6 +154,6 @@ export const experiences: Experience[] = [
       { tint: '#f0d9c7', caption: '[caption]' },
       { tint: '#b8ccf2', caption: '[caption]' },
     ],
-    note: 'long hours, no pay, but creating a space for students to bring their ideas to life ',
+    note: 'long hours, no pay, but creating an environment for students to bring their ideas to life ',
   },
 ]

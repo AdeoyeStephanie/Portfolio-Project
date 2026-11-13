@@ -12,10 +12,11 @@
 | Framework | **Vite + React** | Learn React fundamentals cleanly; a 4-page portfolio doesn't need Next's SSR. |
 | Language | **TypeScript** | Standard for design/UX engineering roles; catches errors, better autocomplete. |
 | Styling | **Tailwind CSS** | You already know it; fast, consistent, easy to match Figma tokens. |
-| Routing | **React Router** | Client-side routing for Home / About / Projects / Contact. |
+| Routing | **React Router** | Client-side routing: `/` Home (experience lives here as overlays), `/my-work`, `/play`, `/beyond-code`. *(Updated 2026-11-04 — the old Home / About / Projects / Contact split is gone.)* |
 | Animation | **Motion** (`motion`, formerly Framer Motion) | The "design engineer" signal — smooth, tasteful transitions. |
 | Deploy | **Vercel**  | Best React DX, per-branch preview deploys. Old Netlify/GH-Pages stays live until launch. |
-| Icons | **lucide-react** or `react-icons` | Replaces the Font Awesome CDN on the contact page. |
+| Icons | **lucide-react** (+ `react-icons` for brand glyphs) | Replaces the Font Awesome CDN. lucide v1 dropped brand icons, so the footer socials are text links until `react-icons` is added. |
+| Analytics | **Vercel Analytics** (`@vercel/analytics`) | Added 2026-10-10 for visitor visibility; `<Analytics />` is mounted once in `App.tsx`. Only records if Web Analytics is enabled on the Vercel project (unverified). |
 
 ---
 
@@ -46,43 +47,47 @@ Files/           resume PDF
 
 ## 2. Target architecture
 
+*(Rewritten 2026-11-04 to match what is actually built — the old About / Projects / Contact plan is gone. ✅ = exists, ⬜ = planned.)*
+
 ```
-portfolio/                      # new Vite project (see Phase 1)
-├─ public/
-│  ├─ headshot.jpg
-│  └─ Stephanie_Adeoye_SWEResume.pdf
+portfolio/                      # Vite + React + TS (the old HTML site stays at the repo root until the clean-up launch)
+├─ public/                      # ✅ headshot.jpg, polaroid-{fall,desk}.jpg, favicon.svg ("sa." monogram),
+│                               #    Stephanie_Adeoye_Resume.pdf, hand-drawn SVG borders (divider, exp-card-border, glance-box, note-box)
+├─ vercel.json                  # ⬜ SPA rewrite — MISSING; this is why direct links 404 (see §7, next step 1)
 ├─ src/
-│  ├─ main.tsx                  # entry + router
-│  ├─ App.tsx                   # layout shell (<Nav/> + <Outlet/>)
-│  ├─ index.css                 # Tailwind directives + font imports + CSS vars
+│  ├─ main.tsx                  # ✅ router
+│  ├─ App.tsx                   # ✅ layout shell: shared #rough SVG filter + <Nav/> + <Outlet/> + <Analytics/>
+│  ├─ index.css                 # ✅ Tailwind v4 `@theme` tokens + fonts (no tailwind.config.ts — v4 reads tokens from CSS)
 │  ├─ components/
-│  │  ├─ Nav.tsx                # the shared menu bar (kills the duplication)
-│  │  ├─ Button.tsx             # resume/menu button, one styled primitive
-│  │  ├─ ProjectCard.tsx
-│  │  └─ ContactCard.tsx        # icon + text, reused 3x
+│  │  ├─ Nav.tsx                # ✅ home · my work · play · beyond code
+│  │  ├─ Footer.tsx             # ✅ pink band: credit line + socials + resume pill
+│  │  ├─ ResumeButton.tsx       # ✅ `full` + `pill` variants → public/Stephanie_Adeoye_Resume.pdf
+│  │  ├─ Polaroid.tsx           # ✅
+│  │  ├─ ExperienceCard.tsx     # ✅ pen-border card → opens `?exp=<slug>`
+│  │  ├─ ExperienceModal.tsx    # ✅ URL-driven overlay (portal, focus trap, ←/→, Esc)
+│  │  ├─ ComingSoon.tsx         # ✅ stand-in screen for unbuilt pages
+│  │  ├─ ProjectCard.tsx        # ⬜ my work grid card
+│  │  └─ overlay tab bar, memory card, deck …   # ⬜ beyond code + play
 │  ├─ pages/
-│  │  ├─ Home.tsx
-│  │  ├─ About.tsx
-│  │  ├─ Projects.tsx
-│  │  └─ Contact.tsx
+│  │  ├─ Home.tsx               # ✅ hero + bio + polaroids + experiences
+│  │  ├─ ExperienceDetail.tsx   # ✅ only a redirect: /experience/:slug → /?exp=<slug>
+│  │  └─ MyWork.tsx · Play.tsx · BeyondCode.tsx   # ⬜ currently <ComingSoon/>
 │  └─ data/
-│     ├─ projects.ts            # [{ title, description, href, tags }]
-│     ├─ about.ts               # bio blocks, skills, orgs
-│     └─ contact.ts             # [{ icon, href, label, blurb }]
-├─ tailwind.config.ts           # theme tokens from Figma (colors, fonts, spacing)
-├─ tsconfig.json
-└─ vite.config.ts
+│     ├─ experiences.ts         # ✅ the 3 roles + full overlay detail model
+│     ├─ memories.ts            # ✅ placeholder content for the 12 + secret 13th trading cards
+│     └─ projects.ts · events.ts · films.ts · journal.ts   # ⬜
+└─ vite.config.ts · tsconfig*.json
 ```
 
 **Component mapping (old → new):**
 
 | Old markup | New React |
 |---|---|
-| `.menu-bar` copied on every page | `<Nav/>` rendered once in `App.tsx` |
-| `.menu-button` / `.resume-button` | `<Button variant="menu" \| "resume"/>` |
-| `.project1/2/3`, `.upcoming-projects` | `projects.ts` data → `.map()` into `<ProjectCard/>` |
-| `.contact-linkedin/email/github` | `contact.ts` data → `.map()` into `<ContactCard/>` |
-| `.about-info1..4` | `about.ts` blocks → mapped sections |
+| `.menu-bar` copied on every page | `<Nav/>` rendered once in `App.tsx` ✅ |
+| `.resume-button` | `<ResumeButton variant="full" or "pill"/>` ✅ (a generic `<Button/>` stays deferred) |
+| `.project1/2/3`, `.upcoming-projects` | `projects.ts` data → `.map()` into `<ProjectCard/>` ⬜ (my work) |
+| `.contact-linkedin/email/github` | footer social links ✅ (Contact has no page of its own) |
+| `.about-info1..4` | Home bio + `experiences.ts` ✅ |
 
 ---
 
@@ -107,11 +112,10 @@ main ─────────────────────────
 **Rules of thumb:**
 - One logical change per branch. Commit often with clear messages (you already use `feat:` / `fix:` — keep that).
 - Open a PR for each slice even solo — the preview deploy + diff review is the payoff. Squash-merge to keep history clean.
-- **Clean up first:** there's an orphaned folder at `.claude/worktrees/quizzical-cray` — a leftover from a past isolated Claude Code task (merged in commit `bee1db2`). It's *not* a registered worktree and *not* tracked by git (`.claude/` is gitignored), so just delete the folder:
-  ```bash
-  rm -rf .claude/worktrees/quizzical-cray
-  ```
-- Don't commit `node_modules/` (your `.gitignore` should cover it — verify when the project's scaffolded).
+- ~~Clean up the orphaned `quizzical-cray` worktree~~ ✅ done in Phase 0. `node_modules/` and `dist/` are ignored via `portfolio/.gitignore`.
+- **What actually happened (checked 2026-11-04):** all 32 commits since `main` diverged went **straight onto `feat/react-migration`** — no `-<slice>` branches and no PRs. Fine for a solo project; the slice-branch + PR flow above is optional (the only thing you give up is a Vercel preview URL per PR).
+- **Branch state:** `feat/react-migration` is 32 commits ahead of `origin/main`; `origin/main` has 1 commit the feature branch lacks (`bc695eb`, a README-only edit saying the site is being rebuilt) and local `main` is 1 behind it. The feature branch never touched `README.md`, so the eventual merge should be conflict-free — `git checkout main && git pull` first.
+- **Housekeeping:** three `.DS_Store` files are still **tracked** (root, `Files/`, `Images/`) even though `.DS_Store` is in `.gitignore` → untrack with `git rm --cached`.
 
 ---
 
@@ -133,32 +137,34 @@ main ─────────────────────────
 ### Phase 1 — Design tokens + shell & routing ⬜
 - [x] **Pull real tokens from Figma → `@theme` in `src/index.css`** (2026-09-16). Light palette: `--color-paper #ffffff` (bg), `--color-ink #000000` (text), `--color-coral #d24836` (accent — headshot backdrop + the glow behind the name). `--font-sans` DM Sans (all weights: ExtraLight nav, Regular body, SemiBold Italic headline), `--font-script` Reenie Beanie. → utilities `bg-paper` / `text-ink` / `text-coral` / `font-sans` / `font-script`.
 - [x] `<Nav/>` component: `home · my work · play · beyond code` (DM Sans). **Active page = coral, hover = bold**, inactive = extralight. **Distress texture** via SVG `#rough` filter — now defined once in `App.tsx` and shared by nav + cards.
-- [ ] `<Button/>` primitive — deferred; no generic button needed yet ("learn more" / resume handled inline)
+- [ ] `<Button/>` primitive — still deferred. `ResumeButton` (full + pill) covers the resume CTAs and "learn more" is inline in `ExperienceCard`. **Revisit when building my work** — Figma's monospace `VIEW` links and the back / tab-bar controls could share it.
 - [x] Router + `App.tsx` shell (`<Nav/>` + `<Outlet/>`). **Routes:** `/` Home, `/my-work`, `/play`, `/beyond-code`, `/experience/:slug` (detail). Experience merged into Home — no standalone `/experience`.
 - [x] Page components in `src/pages/`: **Home (built)**, MyWork/Play/BeyondCode (stubs), ExperienceDetail (stub). Removed old standalone `Experience.tsx`.
 
 ### Phase 2 — Sections (build each against its Figma frame; one branch each) ⬜
 *Old Home/About/Projects/Contact structure is abandoned — the Figma IA below is the source of truth.*
-- [x] **Home page built (2026-10-06) — ✅ DONE FOR NOW (2026-10-08)** — hero (one-line name headline w/ coral glow, pronunciation, Reenie Beanie tagline, coral headshot), bio + 2 polaroids, **professional experiences** list (3 cards w/ Figma pen border → open the experience overlay), pink footer w/ socials. Built responsively (flex, NOT Figma's absolute coords). New: `Polaroid`, `ExperienceCard`, `Footer`, `experiences.ts`. **Resume buttons (built 2026-10-08):** new `src/components/ResumeButton.tsx` (one component, `full` + `pill` variants, from Figma `resume_button` `439:1668` / `resume_pill` `439:1672`) — "see the full resume" under the experiences + a "resume" pill in the footer, both opening `public/Stephanie_Adeoye_Resume.pdf` (latest copy) in a new tab.
-- [ ] **my work** — project cards (Figma "my work" frame); repeated data → `src/data/projects.ts`
+- [x] **Home page built (2026-10-06) — ✅ DONE FOR NOW (2026-10-08)** — hero (one-line name headline w/ coral glow, pronunciation, Reenie Beanie tagline, coral headshot), bio + 2 polaroids, **professional experiences** list (3 cards w/ Figma pen border → open the experience overlay), pink footer w/ socials. Built responsively (flex, NOT Figma's absolute coords). New: `Polaroid`, `ExperienceCard`, `Footer`, `experiences.ts`. **Resume buttons (built 2026-10-08):** new `src/components/ResumeButton.tsx` (one component, `full` + `pill` variants, from Figma `resume_button` `439:1668` / `resume_pill` `439:1672`) — "see the full resume" under the experiences + a "resume" pill in the footer, both opening `public/Stephanie_Adeoye_Resume.pdf` (latest copy) in a new tab. **Follow-ups (2026-10-09 → 11-02):** copy trimmed (bio is now 3 short paragraphs; tagline reworded to "…exploring all things code, design and artificial intelligence"); the experience write-ups are mostly real now (UCSD filled in, MorganHacks role corrected in `2998af9`) but bracketed `[placeholder]` text still renders in the overlays (see §7 next step 3); favicon = "sa." monogram + page title "Stephanie Adéoyè · design engineer" (`2d14098`); Vercel Analytics added (`2a03693`, `be84990`).
+- [ ] **my work** — ← **next page to build.** Figma (re-read 2026-11-04) is section `my_work_section` `292:232` and is still **wireframe fidelity** (grey boxes): the grid frame **`my work` `38:7`** (1512×1453) is a 2×2 grid of project cards — **Clippey** ("taking short notes across multiple chrome tabs"), **Matcha Lab** ("documenting and tinkering with matcha recipes"), **Mock Lab** ("making peer-to-peer mock interviews seamless") and **Coming Soon** ("something interesting is cooking...") — each with a monospace `VIEW` link; plus **four full-page detail frames** `project_description1–4` (`292:213`, `303:41`, `303:58`, `303:75`; each 1512×2190, with the nav): Reenie Beanie title + one-line tagline, a 3-image row, then alternating text / image blocks. Only #1 (Clippey) was opened — confirm 2–4. Data → `src/data/projects.ts` + a `ProjectCard`. **Open decision:** the detail frames are full-height pages with the nav, unlike the experience / beyond-code overlays → lean toward a route like `/my-work/:slug` (which needs the Vercel rewrite first). Needs real screenshots + copy from Stephanie; Figma has none yet.
 - [x] **experience** (built 2026-10-08) — clicking an experience card on the Landing Page opens an **overlay on top of the homepage** (changed 2026-10-08 from separate pages). Built from Figma `home_section`: `364:1837` SE research intern, `364:1838` academic enrichment tutor, `378:2067` director of sponsorships & outreach — each is a 1512×982 overlay frame: a dimmed scrim (click = close), a white rounded **modal with a big shadow that scrolls inside**, **← / → arrow buttons** on the sides (plus ←/→ keys) to move between all three, and × / Esc to close. Modal content: role headline (name-headline style with coral shadow) + org/dates/tags + hero polaroid; "at a glance" box (hand-drawn border); ☆ what i did + tools card; ☆ skills chips; ☆ moments (4 polaroids); note-to-self quote. All body text is placeholder. **Done:** new `src/components/ExperienceModal.tsx` (URL-driven via `?exp=<slug>`, portal, focus-trap, scroll-lock, scroll-reset on nav, wraps around, `prefers-reduced-motion`); `src/data/experiences.ts` expanded to the full detail model; `ExperienceCard` now links `?exp=<slug>`; old `/experience/:slug` route **redirects** to `/?exp=<slug>`; hand-drawn borders `public/{glance-box,note-box}.svg`.
-- [ ] **beyond code** — category cards (Figma "Beyond code" frame `78:14`) open **overlays** instead of pages (changed 2026-10-08): **people** `364:1851`, **film** `364:1957`, **far and sweet** `364:1904`. Each overlay: a dimmed scrim (**click anywhere outside to close**, then open another), a scrolling modal with a shadow, a floating **tab bar "people · film · far and sweet"** above it to switch directly between the three, and × / Esc. Content: people = filter chips + event cards with fanned polaroids; film = @loggedbysteph profile row + series chips + 5×2 reel grid linking to Instagram; far and sweet = entry index + taped polaroid + lined journal spreads with "felt:" mood chips. Photos/text mostly placeholder. Data → `src/data/{events,films,journal}.ts` when built.
-- [ ] **play** — memory-card scavenger hunt (see "Play section — decided 2026-09-29" below; Figma section `play_scopes` `320:67`)
+- [ ] **beyond code** — category cards (Figma "Beyond code" frame `78:14`) open **overlays** instead of pages (changed 2026-10-08): **people** `364:1851`, **film** `364:1957`, **far and sweet** `364:1904`. Each overlay: a dimmed scrim (**click anywhere outside to close**, then open another), a scrolling modal with a shadow, a floating **tab bar "people · film · far and sweet"** above it to switch directly between the three, and × / Esc. Content: people = filter chips + event cards with fanned polaroids; film = @loggedbysteph profile row + series chips + 5×2 reel grid linking to Instagram; far and sweet = entry index + taped polaroid + lined journal spreads with "felt:" mood chips. Photos/text mostly placeholder. Data → `src/data/{events,films,journal}.ts` when built. *(Re-checked 2026-11-04: Figma section `beyond_code_section` `292:185` still has the same four frames — `Beyond code` + the three overlays.)*
+- [ ] **play** — memory-card scavenger hunt (see "Play section — decided 2026-09-29" below). Figma has since been reorganised into `play_section` `292:233`: `play_main` `92:58` (now 1512×1360, was 982), `play_screens (prototype)` `329:428`, and `play_mockups (non-prototyped)` `320:67` (the old `play_scopes`). The real 12 memories / clues / 5 recipes are still undecided — `memories.ts` has ~48 `placeholder` strings.
 - [x] Icons via **lucide-react** (not the old Font Awesome CDN); copy resume PDF + headshot into `portfolio/public/` — headshot + **latest resume PDF** (`Stephanie_Adeoye_Resume.pdf`) now in `portfolio/public/`
 
 ### Phase 3 — Motion, responsive & polish ⬜
 - [ ] Responsive / mobile pass — **deferred: building desktop-first for now** (the old site isn't responsive — kill the fixed pixel offsets like `gap: 290px`, `left: 70%`)
 - [ ] Motion with `motion`: page transitions, hover states, subtle entrance animations (tasteful Reenie Beanie accents where they fit)
+- [ ] **Experiences entrance animation** (asked for during the 2026-09 design exploration) — when the "professional experiences" heading scrolls into view, fade + rise the three cards in with a small stagger (`motion`'s `whileInView`, once only; skipped under `prefers-reduced-motion`). Cards keep the Figma pen-border look.
 - [ ] Accessibility + Lighthouse check
 - [ ] Final design re-sync against the latest Figma frames
 
 ### Phase 4 — Launch ⬜
 
 **🚀 Early launch (chosen 2026-10-08): go live now with Home, off `feat/react-migration`.** Defer the clean merge/root-move to the end. Runbook:
+- [ ] **🔴 Fix the deep-link 404s first (found 2026-11-04).** `portfolio-project-sage-psi.vercel.app/my-work`, `/play`, `/beyond-code` and `/experience/<slug>` all return Vercel's `404: NOT_FOUND` when opened directly or refreshed (in-app clicks work because React Router handles them client-side). There is no `portfolio/vercel.json`. Add `{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }` (static files like the resume PDF are still served first), push, and re-check all four URLs.
 - [ ] **Vercel — add the custom domain.** Project → Settings → Domains → add the Porkbun `.com` (and `www.`). Production branch stays `feat/react-migration`, Root Directory stays `portfolio`. Vercel will show the DNS records to set.
 - [ ] **Porkbun — repoint DNS Netlify → Vercel.** In Porkbun DNS, replace the Netlify records with Vercel's: apex `A` → `76.76.21.21` (confirm the exact value Vercel shows), and `www` `CNAME` → `cname.vercel-dns.com`. Lower the TTL first if you can, to speed propagation.
 - [ ] **Keep Netlify live until DNS propagates**, then retire the Netlify site. Verify `https://<domain>` serves the React app and auto-HTTPS (Vercel cert) is issued.
-- [ ] Sanity-check live: Home renders, resume PDF opens, experience overlay opens, and my work / play / beyond code show the **coming-soon** screens (not broken).
+- [ ] Sanity-check live: Home renders, resume PDF opens, experience overlay opens, and my work / play / beyond code show the **coming-soon** screens (not broken). **Checked 2026-11-04 on `…vercel.app`:** Home ✅, resume PDF ✅ (200, 136 KB), experience overlay via `?exp=` ✅, favicon ✅ — but direct loads of the other routes ❌ (see the first item). Custom-domain status: unknown, nothing in the repo records it.
 
 **Clean-up launch (later, once all pages are built):**
 - [ ] Merge `feat/react-migration` → `main`; move `portfolio/` contents to repo root
@@ -185,9 +191,9 @@ Figma is connected **live** to this Claude Code session (confirmed via `whoami` 
 
 **Type scale (Figma px @1512 canvas — scale down for responsive web):** headline 98px DM Sans SemiBold Italic (coral text-shadow, tracking ~-4px); nav 40px DM Sans ExtraLight; tagline 40px Reenie Beanie; pronunciation 28px DM Sans ExtraLight Italic underlined; bio 27px DM Sans Regular. Headshot: coral bg, `border-radius: 68px`.
 
-**IA / nav:** `experience · my work · play · beyond code`. Frames: Landing Page `1:2` (hero + bio), my work `38:7`, experience `63:131`, Beyond code `78:14`, play `92:58`. Shared `navbar` component in Figma (top-right).
+**IA / nav (updated 2026-11-04):** `home · my work · play · beyond code` — there is no standalone experience page; it is a section of Home with overlays. The Figma file is now organised into four sections: `home_section` `292:184` (Landing Page `1:2` — now 1512×3630 after the resume buttons — plus the 3 experience overlays `364:1837`, `364:1838`, `378:2067`), `my_work_section` `292:232`, `beyond_code_section` `292:185`, and `play_section` `292:233`. `Home Screen (old)` `143:156` is hidden, and the old experience frame `63:131` no longer exists. A separate Figma **page "Polaroid images"** (`88:45`) holds the ~28 captioned polaroid photos you set up as instances of one `polaroid` component (count not re-verified; where they go is undecided — see §7). Shared `navbar` component in Figma (top-right).
 
-**Open questions:** (1) single scrolling page + anchors, or routes per section? (2) exact background — pure white vs a warm off-white? (3) where does Contact live (no nav item for it)? **Motion:** the design has animated nodes → pull `get_motion_context` in Phase 3.
+**Open questions — all resolved by 2026-11-04:** (1) routes per page, with overlays for detail views ✅; (2) pure white `#ffffff` ✅ (as built); (3) Contact = the footer social links (LinkedIn / GitHub / Email) ✅ — Figma had a placeholder "add icons and links to socials". **Motion:** the design has animated nodes → pull `get_motion_context` in Phase 3.
 
 ### Play section — decided 2026-09-29
 
@@ -237,6 +243,44 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 
 ## 7. Where I left off  ✍️ *(update every session)*
 
+- **Last synced:** 2026-11-04 — a full review of the repo, the live site and Figma (docs only; no code changed this session).
+- **Branch:** `feat/react-migration` @ `2998af9` — clean and in sync with origin. `npm run build` ✅ and `npm run lint` ✅ pass.
+- **Live (`portfolio-project-sage-psi.vercel.app`, checked 2026-11-04):** ✅ Home renders · ✅ resume PDF opens · ✅ experience overlay opens via `?exp=<slug>` · ✅ favicon + page title · ❌ **direct loads of `/my-work`, `/play`, `/beyond-code` and `/experience/<slug>` return a Vercel 404** (no SPA rewrite → next step 1).
+
+### Done since the last doc sync (2026-10-09 → 2026-11-02)
+- `2d14098` "sa." monogram favicon + page title · `88a4002` professional-experience details written · `ee1447d` removed a stray comment · `2a03693` + `be84990` Vercel Analytics (`<Analytics/>` in `App.tsx`) · `2998af9` MorganHacks role fixed.
+- Already logged earlier: resume buttons (`45a0c78`), coming-soon screens (`cfcb938`), experience overlay.
+- **Figma changes noticed** (structure only — tokens not re-pulled): the file is now four sections (see §5); `my work` is designed at wireframe fidelity (2×2 grid + 4 detail pages); the Landing Page grew to 3630px with the resume button + footer pill (already built in code); `play_main` is now 1360px tall.
+
+### Next steps (in priority order)
+
+1. 🔴 **Fix the deep-link 404s (~5 min).** Add `portfolio/vercel.json`:
+   ```json
+   { "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+   ```
+   Push, then confirm each URL returns `200`:
+   ```bash
+   for p in /my-work /play /beyond-code /experience/academic-enrichment-tutor; do curl -s -o /dev/null -w "$p %{http_code}\n" https://portfolio-project-sage-psi.vercel.app$p; done
+   ```
+   Until this is fixed, the coming-soon screens and any shared or refreshed link are broken, so it blocks the early launch.
+2. 🔴 **Finish the launch.** Confirm whether the Porkbun `.com` already points at Vercel (nothing in the repo or on the `vercel.app` site says) — if not, run the Phase 4 runbook (add the domain in Vercel → repoint Porkbun DNS → keep Netlify until it propagates). Also re-check that the footer social URLs in `Footer.tsx` are current, and that Vercel's **Analytics** tab is enabled so `<Analytics/>` actually records visits.
+3. 🟠 **Content pass on the three experience overlays.** 22 bracketed `[placeholder]` strings still render live from `src/data/experiences.ts` (UCSD 10, tutor 7, director 5 — e.g. `[photo caption]`, `[software engineering research intern]`, bracketed tool chips), and 14 photo-less `tint` blocks remain. Replace them with real copy and photos, or hide a section when it's empty. Also fix the typo **"UC SanDiego" → "UC San Diego"** (`experiences.ts` line 45 — the same typo exists in Figma).
+4. 🟡 **Build `my work`** (next page — it's what a recruiter clicks after Home). Details in §4. Order: (a) decide page vs overlay for project details; (b) get real content — screenshots and descriptions for Clippey / Matcha Lab / Mock Lab, and what the "Coming Soon" card becomes (Figma only has grey boxes); (c) `src/data/projects.ts`; (d) `ProjectCard` + the 2×2 grid, replacing `<ComingSoon/>` in `MyWork.tsx`; (e) the detail view; (f) before coding, pull `38:7` and `292:213` with `get_design_context` (load the `figma-design-to-code` skill first) and check the wireframes are final.
+5. 🟡 **Build `beyond code`** — overlays + tab bar (§4); data → `src/data/{events,films,journal}.ts`. Needs real photos and copy; decide whether the ~28 Figma polaroids belong here.
+6. 🟡 **Build `play`** — the biggest piece. First decide the real 12 memories, their clues and the 5 café recipes (`src/data/memories.ts` still has ~48 `placeholder` strings). Then build in this order: hub (`play_main` `92:58`) → café → polaroid wall → collect animation → deck drawer → finale. Likely new deps: `canvas-confetti`, `html-to-image`; collected state in `localStorage`.
+7. 🟢 **Phase 3 polish** — responsive / mobile pass (still desktop-first), motion (including the experiences entrance animation), accessibility + Lighthouse, final Figma re-sync; swap the footer's text social links for icons (`react-icons` — Figma's note says "add icons and links to socials").
+8. 🟢 **Housekeeping** — `git rm --cached` the 3 tracked `.DS_Store` files; delete the unused Vite template leftovers (`src/App.css`, `src/assets/{hero.png,react.svg,vite.svg}`, `public/icons.svg` — none are referenced from `src/` or `index.html`); replace the boilerplate `portfolio/README.md`; at the clean-up launch pull `origin/main` (README-only change) before merging.
+
+### Open questions for Stephanie
+- Is the custom `.com` already live on Vercel? (Not recorded anywhere in the repo.)
+- **my work** detail views: full pages (`/my-work/:slug`, as the Figma frames suggest) or overlays like experience / beyond code?
+- Are the `my work` frames final, or still wireframes waiting for a visual pass?
+- Where do the ~28 captioned polaroids on the Figma "Polaroid images" page go — a Home montage, beyond code, or the play polaroid wall?
+- The real content for the 12 play memories and the 5 café recipes.
+
+<details>
+<summary>Earlier sessions (2026-10-06 → 10-08) — kept verbatim as history; superseded by the sections above</summary>
+
 - **Last worked:** 2026-10-08
 - **Current branch:** `feat/react-migration` (clean — the Home build is **committed** as `6b4e997 feat: created home page with about, images and professional experience details`)
 - **Done in the last work session (2026-10-06, now committed):**
@@ -254,3 +298,5 @@ Tools: **Claude Code** · **Claude CLI** · **VS Code** · **Figma** · **Cosmos
 - **To verify yourself:** the **footer social links** point at the old LinkedIn/GitHub/email — confirm they're current.
 - **Resolved from last time:** ✅ home link (nav "home"); ✅ Home + Experience merged; ✅ Home build committed (`6b4e997`).
 - **Notes:** building **desktop-first** (responsive pass = Phase 3); **motion** still pending (Phase 3 → `get_motion_context`). Config/dep changes need a dev-server restart; `.tsx`/`.css` hot-reload.
+
+</details>

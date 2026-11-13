@@ -4,6 +4,7 @@ import ExperienceCard from '../components/ExperienceCard'
 import ExperienceModal from '../components/ExperienceModal'
 import ResumeButton from '../components/ResumeButton'
 import Footer from '../components/Footer'
+import Divider from '../components/Divider'
 import { experiences } from '../data/experiences'
 
 
@@ -91,9 +92,4 @@ export default function Home() {
       <ExperienceModal experiences={experiences} />
     </>
   )
-}
-
-// The hand-drawn horizontal rule from Figma, centered.
-function Divider() {
-  return <img src="/divider.svg" alt="" aria-hidden className="mx-auto my-16 w-[420px] max-w-full" />
 }

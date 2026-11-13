@@ -26,6 +26,7 @@ export default function ProjectCard({ project, tilt = '' }: { project: Project; 
         <ProjectPolaroid
           src={soon ? undefined : card.src}
           alt={card.alt ?? `${title} preview`}
+          fit={card.fit}
           caption={card.caption ?? title.toLowerCase()}
           fallback={soon ? 'coming soon' : title}
           className={`w-full max-w-[460px] ${tilt}`}

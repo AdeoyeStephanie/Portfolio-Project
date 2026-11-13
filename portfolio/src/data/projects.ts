@@ -7,6 +7,8 @@
 // PHOTOS: drop image files into  portfolio/public/images/projects/  and point at
 // them like  src: '/images/projects/clippey-hero.jpg'.  A photo only appears once
 // it has a `src`. Your exported polaroid photos can be used here too.
+// LOGOS / non-photos: add  fit: 'contain'  to a photo to show the WHOLE image
+// instead of cropping it to fill the polaroid.
 //
 // Fields (all on the DETAIL page unless noted):
 //   slug         URL key → /my-work/<slug>. Keep it lowercase-with-dashes.
@@ -31,6 +33,8 @@ export type Photo = {
   alt?: string
   /** Handwritten caption under the polaroid. */
   caption?: string
+  /** 'contain' shows the whole image uncropped (good for logos). Default fills and crops. */
+  fit?: 'cover' | 'contain'
 }
 
 export type Project = {
@@ -57,13 +61,13 @@ export const projects: Project[] = [
     summary: 'taking short notes across multiple chrome tabs',
     tagline: 'a chrome extension based clipboard for saving and editing text',
     tags: ['chrome extension', 'clipboard', 'text editing'],
-    card: {},
+    card: {src: '/images/projects/clippey-logo.png', fit: 'contain',alt: 'Clippey logo', caption: 'meet clippey' },
     hero: {src: '/images/projects/clippey-logo.png', alt: 'Clippey logo'},
     idea: ['MacOS lacks native clipboard history. How do i create some sort of clipboard for just my web browser?','This was also my first time building a Chrome extension. The goal was to create something that was not only functional, but also intuitive and easy to use.'],
     tools: [],
     build: ['I started by learning how Chrome extensions work and how to use the Chrome APIs. Then i went into figma to prototype the extension and how it would look on a google tab. This was one of the most interesting parts because i had to create all my visual assets and simulate how the extension would look and work.',
       'At this time I was also quite rusty on API development and JavaScript so I went back to documentation and YouTube tutorials to learn.',
-      ''],
+      ],
     buildPhoto: {},
     screenshots: [],
     links: { github: 'https://github.com/AdeoyeStephanie/Clippey', live: 'https://chromewebstore.google.com/detail/clippey/ahjnaiafahdgcpmkmkinemhfobllloii?pli=1' },

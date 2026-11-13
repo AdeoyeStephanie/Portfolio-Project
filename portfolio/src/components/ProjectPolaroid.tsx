@@ -7,6 +7,8 @@ type ProjectPolaroidProps = {
   alt?: string
   caption?: string
   fallback?: string
+  /** 'contain' shows the whole image (logos); 'cover' (default) fills and crops. */
+  fit?: 'cover' | 'contain'
   shape?: 'landscape' | 'square'
   /** Width + tilt come from the caller, e.g. "w-full max-w-md -rotate-3". */
   className?: string
@@ -17,6 +19,7 @@ export default function ProjectPolaroid({
   alt,
   caption,
   fallback,
+  fit = 'cover',
   shape = 'landscape',
   className = '',
 }: ProjectPolaroidProps) {
@@ -27,7 +30,11 @@ export default function ProjectPolaroid({
       className={`flex flex-col gap-3 bg-paper p-4 shadow-[0px_6px_20px_0px_rgba(0,0,0,0.2)] ${className}`}
     >
       {src ? (
-        <img src={src} alt={alt ?? caption ?? ''} className={`w-full object-cover ${ratio}`} />
+        <img
+          src={src}
+          alt={alt ?? caption ?? ''}
+          className={`w-full ${ratio} ${fit === 'contain' ? 'bg-[#faf5f0] object-contain p-6' : 'object-cover'}`}
+        />
       ) : (
         <div className={`flex w-full items-center justify-center bg-coral/25 ${ratio}`}>
           <span className="px-4 text-center font-script text-5xl text-coral">{fallback}</span>

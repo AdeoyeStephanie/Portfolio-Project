@@ -12,7 +12,7 @@ const socials = [
 export default function Footer() {
   return (
     <footer className="mt-24 flex flex-wrap items-center justify-between gap-4 bg-coral/25 px-8 py-8 font-sans text-sm text-ink sm:px-12">
-      <p>made with claude code, figma, and a lot of matcha lattes</p>
+      <p>made with Claude Code, designed in Figma</p>
       <div className="flex items-center gap-5">
         {socials.map(({ label, href }) => (
           <a

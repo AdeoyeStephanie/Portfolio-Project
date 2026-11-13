@@ -58,7 +58,7 @@ export const projects: Project[] = [
     tagline: 'a chrome extension based clipboard for saving and editing text',
     tags: ['chrome extension', 'clipboard', 'text editing'],
     card: {},
-    hero: {},
+    hero: {src: '/images/projects/clippey-logo.png', alt: 'Clippey logo'},
     idea: ['MacOS lacks native clipboard history. How do i create some sort of clipboard for just my web browser?','This was also my first time building a Chrome extension. The goal was to create something that was not only functional, but also intuitive and easy to use.'],
     tools: [],
     build: ['I started by learning how Chrome extensions work and how to use the Chrome APIs. Then i went into figma to prototype the extension and how it would look on a google tab. This was one of the most interesting parts because i had to create all my visual assets and simulate how the extension would look and work.',

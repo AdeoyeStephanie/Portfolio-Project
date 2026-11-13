@@ -4,16 +4,18 @@
 //
 // `slug` is the URL key: a card opens its overlay at `/?exp=<slug>`.
 //
-// Body copy below is PLACEHOLDER (mirrors the Figma template) — swap it for real
-// write-ups. Photos are optional: leave `src` off and set a `tint` hex and the
-// polaroid shows a coloured block instead (matches the Figma placeholders).
+// Photos are optional: a hero or moment with no `src` is simply not shown on the
+// live site (so no empty coloured blocks). Add a `src` to a slot and it appears.
 
 export type Moment = {
-  /** Photo in /public. Omit to show a coloured placeholder block. */
+  /** Photo in /public. A hero/moment without a `src` is hidden. */
   src?: string
-  /** Fallback block colour when there's no photo yet. */
+  /** Authoring-only slot colour while there's no photo yet (never rendered). */
   tint?: string
-  caption: string
+  /** Handwritten caption under the photo; omit for none. */
+  caption?: string
+  /** Alt text for the photo (falls back to the caption). */
+  alt?: string
 }
 
 export type Experience = {
@@ -42,16 +44,16 @@ export const experiences: Experience[] = [
   {
     slug: 'software-engineering-research-intern',
     role: 'software engineering research intern',
-    org: 'UC SanDiego',
+    org: 'UC San Diego',
     dates: "Summer 2026", //brief date
     tags: ['internship', 'research', 'software'],
     oneLiner:
       'my first internship in college, so far away from home in an amazing city',
-    hero: { src: '/polaroid-desk.jpg', caption: '[photo caption]' },
+    hero: { src: '/polaroid-desk.jpg', alt: 'Stephanie’s desk setup with ambient lighting' },
     glance: {
-      role: '[software engineering research intern]',
-      team: '[UCSD STARS / PI: Victor Minces]',
-      where: '[San Diego, CA / Hybrid]',
+      role: 'software engineering research intern',
+      team: 'UCSD STARS / PI: Victor Minces',
+      where: 'San Diego, CA / Hybrid',
       when: "June - August 2026",
     },
     whatIDid: {
@@ -64,17 +66,17 @@ export const experiences: Experience[] = [
         'improvement — cut per-update DOM work from O(n) to O(1) by caching transcript-word element lookups and resolved a decay-timer race condition, smoothing real-time playback and gesture response on mobile',
   ],
     },
-    tools: ['[JavaScript]', '[Web Audio API]', '[MediaPipe]', '[Howler.js]', '[Netlify Functions]', '[Git/GitHub]', '[Claude Code]'],
+    tools: ['JavaScript', 'Web Audio API', 'MediaPipe', 'Howler.js', 'Netlify Functions', 'Git/GitHub', 'Claude Code'],
     // skills i picked up
     skills: {
-      technical: ['[user research]', '[full-stack development]', '[cross-browser / on-device debugging]', '[performance optimization]'],
+      technical: ['user research', 'full-stack development', 'cross-browser / on-device debugging', 'performance optimization'],
       soft: ['systematic problem-solving', 'communication'],
     },
     moments: [
-      { tint: '#b8ccf2', caption: '[caption]' },
-      { tint: '#f0d9c7', caption: '[caption]' },
-      { tint: '#9ebd73', caption: '[caption]' },
-      { tint: '#f5a873', caption: '[caption]' },
+      { tint: '#b8ccf2' },
+      { tint: '#f0d9c7' },
+      { tint: '#9ebd73' },
+      { tint: '#f5a873' },
     ],
     note: 'stepping into a new role is scary, but you gain confidence with each challenge.',
   },
@@ -88,10 +90,10 @@ export const experiences: Experience[] = [
     tags: ['on-campus', 'academia', 'tutoring'],
     oneLiner:
       'my first job in college',
-    hero: { tint: '#b8ccf2', caption: '[photo caption]' },
+    hero: { tint: '#b8ccf2' },
     glance: {
       role: 'Academic Enrichment Tutor',
-      team: '[Academic Enrichment Program (AEP) ]',
+      team: 'Academic Enrichment Program (AEP)',
       where: 'Baltimore, MD',
       when: "fall '25 – present",
     },
@@ -99,21 +101,21 @@ export const experiences: Experience[] = [
       paragraph:
         'tutoring students in computer science and mathematics as well as general education courses',
       highlights: [
-        'events- hosting monthly workshops and study sessions',
+        'events — hosting monthly workshops and study sessions',
         'service — serving the university community at volunteer events',
-        'learning — breaking down complex conepts to make them more understandable',
+        'learning — breaking down complex concepts to make them more understandable',
       ],
     },
-    tools: ['[navigateEAB]', '[Canva]', '[tool]', '[subject]', '[subject]'],
+    tools: ['navigateEAB', 'Canva'],
     skills: {
       technical: [],
       soft: ['communication', 'patience', 'empathy'],
     },
     moments: [
-      { tint: '#f5a873', caption: '[caption]' },
-      { tint: '#9ebd73', caption: '[caption]' },
-      { tint: '#b8ccf2', caption: '[caption]' },
-      { tint: '#f0d9c7', caption: '[caption]' },
+      { tint: '#f5a873' },
+      { tint: '#9ebd73' },
+      { tint: '#b8ccf2' },
+      { tint: '#f0d9c7' },
     ],
     note: 'teaching others the basics of programming often helps me solidify my own understanding.',
   },
@@ -127,7 +129,7 @@ export const experiences: Experience[] = [
     tags: ['people', 'leadership', 'outreach'],
     oneLiner:
       'Joined a team of passionate individuals to organize the largest HBCU hosted hackathon in Maryland.',
-    hero: { tint: '#f0d9c7', caption: '[photo caption]' },
+    hero: { tint: '#f0d9c7' },
     glance: {
       role: 'Director of Sponsorships & Outreach',
       team: 'MorganHacks',
@@ -136,7 +138,7 @@ export const experiences: Experience[] = [
     },
     whatIDid: {
       paragraph:
-        'reaching out to potential sponsors and partners to secure financialsupport for the hackathon.',
+        'reaching out to potential sponsors and partners to secure financial support for the hackathon.',
       highlights: [
         'sponsors — maintained sponsor relationships and secured new partnerships',
         'prizes — increased prizes by 40% from the previous year, the highest in the event’s history',
@@ -149,10 +151,10 @@ export const experiences: Experience[] = [
       soft: ['negotiation', 'outreach', 'leadership'],
     },
     moments: [
-      { tint: '#9ebd73', caption: '[caption]' },
-      { tint: '#f5a873', caption: '[caption]' },
-      { tint: '#f0d9c7', caption: '[caption]' },
-      { tint: '#b8ccf2', caption: '[caption]' },
+      { tint: '#9ebd73' },
+      { tint: '#f5a873' },
+      { tint: '#f0d9c7' },
+      { tint: '#b8ccf2' },
     ],
     note: 'long hours, no pay, but creating an environment for students to bring their ideas to life ',
   },

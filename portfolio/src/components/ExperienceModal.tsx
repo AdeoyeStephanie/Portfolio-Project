@@ -27,6 +27,8 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
   const index = experiences.findIndex((e) => e.slug === activeSlug)
   const open = index >= 0
   const exp = open ? experiences[index] : null
+  // Only moments that have a real photo are shown (no empty coloured blocks).
+  const moments = exp ? exp.moments.filter((m) => m.src).slice(0, 4) : []
 
   const dialogRef = useRef<HTMLDivElement>(null)
   // Remember what was focused before opening so we can restore it on close.
@@ -43,6 +45,11 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
       { replace: true },
     )
   }, [setParams])
+
+  // An unknown ?exp= (typo, removed role) shouldn't linger in the URL.
+  useEffect(() => {
+    if (activeSlug && index < 0) close()
+  }, [activeSlug, index, close])
 
   const go = useCallback(
     (dir: 1 | -1) => {
@@ -231,14 +238,14 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
             </div>
 
             {/* ── MOMENTS ── */}
-            {exp.moments.length > 0 && (
+            {moments.length > 0 && (
               <div className="mt-14">
                 <Heading>moments</Heading>
                 <p className="mt-2 font-sans text-xl font-light italic text-neutral-500">
                   a few snapshots from the role
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-6 sm:justify-start">
-                  {exp.moments.slice(0, 4).map((m, i) => (
+                  {moments.map((m, i) => (
                     <ModalPolaroid
                       key={i}
                       moment={m}
@@ -285,8 +292,8 @@ function Chip({ children, soft = false }: { children: React.ReactNode; soft?: bo
   )
 }
 
-// A polaroid for the overlay. Shows the photo, or a coloured block placeholder
-// (`tint`) when there's no photo yet. `width` sizes it; `className` tilts it.
+// A polaroid for the overlay. Renders nothing until the moment has a photo
+// (`src`); the caption is optional. `width` sizes it; `className` tilts it.
 function ModalPolaroid({
   moment,
   width,
@@ -296,17 +303,16 @@ function ModalPolaroid({
   width: number
   className?: string
 }) {
+  if (!moment.src) return null
   return (
     <figure
       className={`flex flex-col gap-3 bg-paper p-4 shadow-[0px_6px_20px_0px_rgba(0,0,0,0.2)] ${className}`}
       style={{ width }}
     >
-      {moment.src ? (
-        <img src={moment.src} alt={moment.caption} className="aspect-square w-full object-cover" />
-      ) : (
-        <div className="aspect-square w-full" style={{ backgroundColor: moment.tint ?? '#e5e5e5' }} aria-hidden />
+      <img src={moment.src} alt={moment.alt ?? moment.caption ?? ''} className="aspect-square w-full object-cover" />
+      {moment.caption && (
+        <figcaption className="text-center font-script text-2xl text-ink">{moment.caption}</figcaption>
       )}
-      <figcaption className="text-center font-script text-2xl text-ink">{moment.caption}</figcaption>
     </figure>
   )
 }

@@ -1,8 +1,16 @@
-import { Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import Nav from './components/Nav'
 import { Analytics } from "@vercel/analytics/react"
 
 export default function App() {
+  // A new page should start at the top (e.g. opening a project from the grid).
+  // Keyed on pathname only, so the ?exp= overlay doesn't scroll the page.
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <div className="min-h-svh">
       {/* Global "rough" filter — defined ONCE here, used by the nav text and the

@@ -8,6 +8,7 @@ import MyWork from './pages/MyWork.tsx'
 import Play from './pages/Play.tsx'
 import BeyondCode from './pages/BeyondCode.tsx'
 import ExperienceDetail from './pages/ExperienceDetail.tsx'
+import ProjectDetail from './pages/ProjectDetail.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="my-work" element={<MyWork />} />
+          <Route path="my-work/:slug" element={<ProjectDetail />} />
           <Route path="play" element={<Play />} />
           <Route path="beyond-code" element={<BeyondCode />} />
           <Route path="experience/:slug" element={<ExperienceDetail />} />

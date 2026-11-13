@@ -19,6 +19,7 @@ import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { X, ArrowLeft, ArrowRight } from 'lucide-react'
+import StarHeading from './StarHeading'
 import type { Experience, Moment } from '../data/experiences'
 
 export default function ExperienceModal({ experiences }: { experiences: Experience[] }) {
@@ -203,7 +204,7 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
             {/* ── WHAT I DID + TOOLS ── */}
             <div className="mt-14 flex flex-col gap-10 lg:flex-row lg:justify-between">
               <div className="min-w-0 flex-1">
-                <Heading>what i did</Heading>
+                <StarHeading>what i did</StarHeading>
                 <p className="mt-6 max-w-2xl font-sans text-2xl font-light leading-relaxed text-ink">
                   {exp.whatIDid.paragraph}
                 </p>
@@ -224,7 +225,7 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
 
             {/* ── SKILLS ── */}
             <div className="mt-14">
-              <Heading>skills i picked up</Heading>
+              <StarHeading>skills i picked up</StarHeading>
               <div className="mt-6 flex flex-wrap gap-3">
                 {exp.skills.technical.map((s, i) => (
                   <Chip key={`t-${i}`}>{s}</Chip>
@@ -240,7 +241,7 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
             {/* ── MOMENTS ── */}
             {moments.length > 0 && (
               <div className="mt-14">
-                <Heading>moments</Heading>
+                <StarHeading>moments</StarHeading>
                 <p className="mt-2 font-sans text-xl font-light italic text-neutral-500">
                   a few snapshots from the role
                 </p>
@@ -268,16 +269,6 @@ export default function ExperienceModal({ experiences }: { experiences: Experien
 }
 
 /* ─────────────────────────── small building blocks ─────────────────────────── */
-
-// Section heading: "☆ <text>" in Reenie Beanie, star smaller than the words.
-function Heading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="font-script text-ink">
-      <span className="text-4xl">☆</span>
-      <span className="text-5xl sm:text-6xl"> {children}</span>
-    </h3>
-  )
-}
 
 // A coral-outlined pill. Soft skills get a tinted fill (matches Figma).
 function Chip({ children, soft = false }: { children: React.ReactNode; soft?: boolean }) {

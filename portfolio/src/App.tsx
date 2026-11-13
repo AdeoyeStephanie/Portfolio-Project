@@ -13,6 +13,11 @@ export default function App() {
           <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2" seed="7" result="n" />
           <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
+        {/* Softer variant for small screens (nav text is tiny there). */}
+        <filter id="rough-sm" x="-15%" y="-15%" width="130%" height="130%">
+          <feTurbulence type="fractalNoise" baseFrequency="1" numOctaves="2" seed="7" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
       </svg>
 
       <Nav />

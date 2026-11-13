@@ -20,7 +20,7 @@ export default function Footer() {
             href={href}
             target={href.startsWith('mailto:') ? undefined : '_blank'}
             rel="noreferrer"
-            className="transition-colors hover:text-coral"
+            className="-mx-1 -my-3 px-1 py-3 transition-colors hover:text-coral"
           >
             {label}
           </a>
